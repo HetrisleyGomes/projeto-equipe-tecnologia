@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<div class="container">
+    {% if data['status'] == 200 %}
+    <form action="/edicao/salvar/{{data['body']['id']}}" method="post" class="form">
+    <div class="section title">
+        <span class="title-h2">{{ data['body']['setor'] }}</span>
+        <div class="">
+            <a href="../ver/{{data['body']['id']}}" class="btn">Voltar</a>
+            <button type="submit" class="btn" id="btnRedirect">Salvar edições</button>
+        </div>
+    </div>
+    <hr>
+    <div class="section">
+        <span class="bolder-text">Descrição:</span>
+        <pre class="discription">{{ data['body']['description'] }}</pre>
+    </div>
+    <hr>
+    <div class="section container">
+        <div class="row">
+            <div class="col">
+                <div class="container date-container">
+                    <span class="bolder-text">Data de emissão:</span>
+                    <span>{{ data['body']['data_emissao'] }}</span>
+                </div>
+                <div class="container date-container">
+                    {% if data['body']['status'] == 'Finalizado' %}
+                        <span class="bolder-text">Data conclusão:</span>
+                        <span>{{ data['body']['data_conclusao'] }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="container">
+                    <span class="bolder-text">Prioridade:</span>
+                    <select name="priority" id="priority" class="form-text lil-form">
+                        <option value="0" {% if data['body']['priority'] == 0 %}selected{% endif %}>0</option>
+                        <option value="1" {% if data['body']['priority'] == 1 %}selected{% endif %}>1</option>
+                    </select>
+                </div>
+                <div class="container">
+                    <span class="bolder-text">Status:</span>
+                    <select name="status" id="status" class="form-text lil-form">
+                        <option value="A analisar" {% if data['body']['status'] == "A analisar" %}selected{% endif %}>A analisar</option>
+                        <option value="Vizualizado" {% if data['body']['status'] == "Vizualizado" %}selected{% endif %}>Vizualizado</option>
+                        <option value="Em Vistoria" {% if data['body']['status'] == "Em Vistoria" %}selected{% endif %}>Em Vistoria</option>
+                        <option value="Finalizado" {% if data['body']['status'] == "Finalizado" %}selected{% endif %}>Finalizado</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    {% if data['body']['status'] != 'Finalizado' %}
+    <form action="/finalizar/{{data['body']['id']}}" method="post" class="form">
+        <div class="">
+            <button type="submit" class="btn">Marcar como concluído</button>
+        </div>
+    </form>
+    {% endif %}
+    <hr>
+    <div class="section">
+        <span class="bolder-text">Comentários:</span><br>
+        <ul id="comments-list" class="comments-list">
+            {% if data['body']['comments'] %}
+                {% for comment in comentarios %}
+                    <li class="comment">{{ comment|e }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+{% endblock %}

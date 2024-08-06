@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Adicione Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/main.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/forms-buttons.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <a href="/">
+                        <img src="../static/images/logo.png" alt="Logo" class="image-logo">
+                    </a>
+                </div>
+                <div class="col">
+                    <span class="enfase">
+                        Setor de Tecnologia da cidade de Monte Alegre.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block conteudo %}
+        {% endblock %}
+    </main>
+</body>
+</html>
