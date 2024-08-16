@@ -1,5 +1,22 @@
 from flask import Flask
-from src.main.routes.routes import main_bp
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
-app.register_blueprint(main_bp)
+socketio = SocketIO(app)
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+@socketio.on('update_request')
+def handle_update_request(data):
+    # Broadcast update to all clients
+    emit('update', data, broadcast=True)
+
+@socketio.on('message')
+def handle_message(data):
+    print('received message: ' + data)

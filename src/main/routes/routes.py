@@ -1,22 +1,17 @@
 from flask import render_template, url_for, request, redirect, Blueprint, jsonify
-from datetime import datetime
 import json
 
 from src.models.repositories.requisicoes_repository import RequisicoesRepository
-
 from src.controllers.requisicao_controller import RequisicaoController
 
 from src.models.settings.db_connection_handler import db_connection_handler
-
-#path = os.path.join(os.path.dirname(__file__), 'database', 'data.json')
+from src.main.server.server import socketio  # Importa socketio do módulo de configuração
 
 main_bp = Blueprint('main_bp', __name__, template_folder='templates')
-
 
 inverter_ordem = False
 mostrar_prioridades = False
 mostrar_finalizados = False
-
 
 @main_bp.route("/")
 @main_bp.route("/index")
@@ -43,6 +38,7 @@ def salvar_registro():
         "nome_requisitante": nome_requisitante
     }
     data = controller.create(body)
+    socketio.emit('update')
     return redirect(url_for('main_bp.index'))
 
 
@@ -72,7 +68,8 @@ def adicionar_comentario():
     repository = RequisicoesRepository(db_connection_handler.get_connection())
     controller = RequisicaoController(repository)
     response_data = controller.update_comments(id, comment)
-    #return redirect(url_for('main_bp.find_registro', id = id))
+    socket_data = {'comment': comment}
+    socketio.emit('update', socket_data)
     return jsonify({'comment': comment})
 
 @main_bp.route('/verificar_senha', methods=['POST'])
@@ -116,18 +113,20 @@ def edit_salvar_registro(id):
     if priority == "1":
         if status == "A analisar":
             status = "Vizualizado"
-
+    if status == "Finalizado":
+        return redirect(url_for("main_bp.finalizar_registro", id=id))
     data = controller.update_infos(id, priority, status)
-    print(data)
+    socketio.emit('update_edit')
     return redirect(url_for("main_bp.find_registro", id=id))
 
-@main_bp.route("/finalizar/<id>", methods=['POST'])
+@main_bp.route("/finalizar/<id>", methods=['GET','POST'])
 def finalizar_registro(id):
     repository = RequisicoesRepository(db_connection_handler.get_connection())
     controller = RequisicaoController(repository)
 
     data = controller.finalizar(id)
-    print(data)
+    data = controller.get_one(id)
+    socketio.emit('update_edit')
     return redirect(url_for("main_bp.find_registro", id=id))
 
 @main_bp.route('/atualizar_lista', methods=['GET'])
@@ -147,6 +146,18 @@ def atualizar_lista():
     filtered_data = [item for item in filtered_data if not mostrar_prioridades or item[4] == 1]
     
     # Ordenar os dados filtrados
-    sorted_data = sorted(filtered_data, reverse=inverter_ordem)
+    #sorted_data = sorted(filtered_data, reverse=inverter_ordem)
+    sorted_data = filtered_data.reverse()
+    print('sd')
+    print(sorted_data)
+    
 
     return jsonify({'body': sorted_data})
+
+# Defina suas rotas aqui
+@main_bp.route('/update_request/<int:request_id>', methods=['POST'])
+def update_request(request_id):
+    # Código para atualizar a requisição no banco de dados
+    data = {'request_id': request_id, 'new_data': 'updated'}
+    socketio.emit('update', data, broadcast=True)
+    return 'Update successful'

@@ -1,0 +1,51 @@
+@media only screen and (max-width: 600px) {
+    * {
+        font-size: 12px;
+    }
+    .image-logo {
+        width: 130px;
+        height: 60px;
+        transition: transform 0.2s ease;
+    }
+    .enfase{
+        font-size: 12px;
+        width: 45vw;
+    }
+    .btn{
+        font-size: 12px;
+        margin: .5vh .5vw;
+    }
+    .btn-small{
+        font-size: 10px;
+        padding: 1vh 1.5vw;
+    }
+    .label-switch {
+        padding-top: 0;
+    }
+    .form-text {
+        font-size: 0.8rem;
+    }
+    .section{
+        width: auto;
+    }
+    .effects-area{
+        justify-content: space-between;
+    }
+    .form-check{
+        margin: auto;
+    }
+    .date-container {
+        height: 6vh;
+    }
+    .form {
+        padding: 1vh 1vw;
+    }
+    .row {
+        flex-wrap: wrap;
+    }
+    .last {
+        display: block;
+        margin-left: 50%;
+        margin-top: 2vh;
+    }
+}

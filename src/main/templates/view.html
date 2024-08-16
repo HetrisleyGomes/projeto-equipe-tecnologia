@@ -28,18 +28,18 @@
                 {% if data['body']['status'] == 'Finalizado' %}
                 <div class="container date-container">
                     <span class="bolder-text">Data conclusão:</span>
-                    <span>{{ data['body']['data_conclusao'] }}</span>
+                    <span id="data_conclusao">{{ data['body']['data_conclusao'] }}</span>
                 </div>
                 {% endif %}
             </div>
             <div class="col">
                 <div class="container date-container">
                     <span class="bolder-text">Prioridade:</span>
-                    <span>{{ data['body']['priority'] }}</span>
+                    <span id="priority">{{ data['body']['priority'] }}</span>
                 </div>
                 <div class="container date-container">
                     <span class="bolder-text">Status:</span>
-                    <span>{{ data['body']['status'] }}</span>
+                    <span id="status">{{ data['body']['status'] }}</span>
                 </div>
             </div>
         </div>
@@ -116,13 +116,6 @@
                     return response.json();
                 })
                 .then(function(data) {
-                    // Atualizar a lista de comentários na página
-                    var commentsList = document.getElementById('comments-list');
-                    var newComment = document.createElement('li');
-                    newComment.classList.add("comment")
-                    newComment.textContent = data.comment;
-                    commentsList.appendChild(newComment);
-
                     // Limpar o campo de texto do comentário
                     commentTextarea.value = '';
                 })
@@ -167,6 +160,39 @@
                 alert(response.message);
             }
         }, 'json');
+    }
+    // Conecte-se ao servidor SocketIO
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    console.log(socket)
+    // Evento de conexão
+    socket.on('connect', function() {
+        console.log('Connected to server');
+        //socket.emit('update_request', { request_id: 1, new_data: 'Test update' });
+    });
+
+    // Evento de desconexão
+    socket.on('disconnect', function() {
+        console.log('Disconnected from server');
+    });
+    // Evento de atualização
+    socket.on('update', function(data) {
+        console.log('Received update:', data);
+        updateRequests(data);
+    });
+    socket.on('update_edit', function(data) {
+        console.log('Received update:', data);
+        update_editRequests(data);
+    });
+    function updateRequests(data) {
+        var commentsList = document.getElementById('comments-list');
+        var newComment = document.createElement('li');
+        newComment.classList.add("comment")
+        newComment.textContent = data.comment;
+        commentsList.appendChild(newComment);
+        commentTextarea.value = '';
+    }
+    function update_editRequests(data) {
+        location.reload()
     }
 </script>
 {% endblock %}

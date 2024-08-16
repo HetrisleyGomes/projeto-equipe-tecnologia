@@ -82,5 +82,13 @@
             updateList(inverterOrdem, mostrarPrioridades, mostrarFinalizados);
         });
     });
+    // Conecte-se ao servidor SocketIO
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    socket.on('update', function() {
+        updateRequests();
+    });
+    function updateRequests() {
+        location.reload()
+    }
 </script>
 {% endblock %}
