@@ -15,7 +15,7 @@ Sistema por: @Hetrisley_Gomes.
         /settings       # Estabelece conexão com o banco de dados
     /main               # Componentes principais da aplicação
         /routes         # Definição de rotas da API
-        /server         # Configura o servidor Flask
+        /server         # Configura o servidor Flask e a conexão de Socket
         /static         # Arquivos estáticos, como imagens e folhas de estilo
         /templates      # Documentos html
 /init                   # Inicializa o servidor Flask e a conexão com o banco de dados
