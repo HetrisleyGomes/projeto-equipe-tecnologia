@@ -146,11 +146,9 @@ def atualizar_lista():
     filtered_data = [item for item in filtered_data if not mostrar_prioridades or item[4] == 1]
     
     # Ordenar os dados filtrados
-    #sorted_data = sorted(filtered_data, reverse=inverter_ordem)
-    sorted_data = filtered_data.reverse()
-    print('sd')
-    print(sorted_data)
-    
+    sorted_data = filtered_data
+    if inverter_ordem:
+        sorted_data.reverse()
 
     return jsonify({'body': sorted_data})
 

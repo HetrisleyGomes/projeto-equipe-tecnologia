@@ -30,6 +30,8 @@
     }
     .effects-area{
         justify-content: space-between;
+        gap: 6vw;
+        margin-left: 4vw;
     }
     .form-check{
         margin: auto;
