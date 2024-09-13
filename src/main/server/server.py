@@ -4,19 +4,23 @@ from flask_socketio import SocketIO, emit
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 socketio = SocketIO(app)
 
-@socketio.on('connect')
+
+@socketio.on("connect")
 def handle_connect():
-    print('Client connected')
+    print("Client connected")
 
-@socketio.on('disconnect')
+
+@socketio.on("disconnect")
 def handle_disconnect():
-    print('Client disconnected')
+    print("Client disconnected")
 
-@socketio.on('update_request')
+
+@socketio.on("update_request")
 def handle_update_request(data):
     # Broadcast update to all clients
-    emit('update', data, broadcast=True)
+    emit("update", data, broadcast=True)
 
-@socketio.on('message')
+
+@socketio.on("message")
 def handle_message(data):
-    print('received message: ' + data)
+    print("received message: " + data)
