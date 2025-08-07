@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<div class="container">
+    {% if data['status'] == 200 %}
+    <div class="section title">
+        <span class="title-h2">{{ data['body']['setor'] }}</span>
+        <div class="">
+            <a href="/" class="btn">Voltar</a>
+            <a href="{{ url_for('main_bp.edit_registro', id=data['body']['id']) }}" class="btn">Editar</a>
+        </div>
+    </div>
+    <hr>
+    <div class="section section-grid">
+        <span class="bolder-text">Solicitante:</span>
+        <span class="discription">{{ data['body']['nome_requisitante'] }}</span>
+        <br>
+        <span class="bolder-text">Descrição:</span>
+        <span class="discription">{{ data['body']['description'] }}</span>
+    </div>
+    <hr>
+    <div class="section container">
+        <div class="row">
+            <div class="col">
+                <div class="container date-container">
+                    <span class="bolder-text">Data de emissão:</span>
+                    <span>{{ data['body']['data_emissao'] }}</span>
+                </div>
+                {% if data['body']['status'] == 'Finalizado' %}
+                <div class="container date-container">
+                    <span class="bolder-text">Data conclusão:</span>
+                    <span id="data_conclusao">{{ data['body']['data_conclusao'] }}</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col">
+                <div class="container date-container">
+                    <span class="bolder-text">Prioridade:</span>
+                    <span id="priority">{{ data['body']['priority'] }}</span>
+                </div>
+                <div class="container date-container">
+                    <span class="bolder-text">Status:</span>
+                    <span id="status">{{ data['body']['status'] }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="section">
+        <span class="bolder-text">Comentários:</span><br>
+        <ul id="comments-list" class="comments-list">
+            {% if data['body']['comments'] %}
+                {% for comment in comentarios %}
+                    <li class="comment">{{ comment|e }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+        {% if data['body']['status'] != 'Finalizado' %}
+            <form class="form" id="comment-form">
+                <textarea name="comment" id="comment" class="form-text" cols="30" rows="3" required placeholder="Digite seu comentário"></textarea>
+                <input type="hidden" id="dados" name="dados" value="{{data['body']['id']}}">
+                <div class="form-button">
+                    <button type="submit" class="btn">Comentar</button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    {% endif %}
+<!-- Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordModalLabel">Digite a Senha de Acesso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="password" class="form-text" id="inputPassword" name="senha" placeholder="Senha de acesso">
+                    <input type="hidden" id="inputId" name="id" value="{{data['body']['id']}}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnSubmitPassword">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adicione Bootstrap JS e jQuery (necessário para Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('comment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var commentTextarea = document.getElementById('comment');
+            var comment = commentTextarea.value.trim();
+            var dados = document.getElementById('dados').value;
+
+            if (comment !== '') {
+                // Enviar o comentário via AJAX para o Flask
+                fetch('/adicionar_comentario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ comment: comment, dados: dados })
+                    
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    // Limpar o campo de texto do comentário
+                    commentTextarea.value = '';
+                })
+                .catch(function(error) {
+                    console.error('Erro ao enviar o comentário:', error);
+                });
+            }
+        });
+    });
+
+    // Conecte-se ao servidor SocketIO
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    console.log(socket)
+    // Evento de conexão
+    socket.on('connect', function() {
+        console.log('Connected to server');
+        //socket.emit('update_request', { request_id: 1, new_data: 'Test update' });
+    });
+
+    // Evento de desconexão
+    socket.on('disconnect', function() {
+        console.log('Disconnected from server');
+    });
+    // Evento de atualização
+    socket.on('update', function(data) {
+        console.log('Received update:', data);
+        updateRequests(data);
+    });
+    function updateRequests(data) {
+        var commentsList = document.getElementById('comments-list');
+        var newComment = document.createElement('li');
+        newComment.classList.add("comment")
+        newComment.textContent = data.comment;
+        commentsList.appendChild(newComment);
+        commentTextarea.value = '';
+    }
+    function update_editRequests(data) {
+        location.reload()
+    }
+</script>
+{% endblock %}

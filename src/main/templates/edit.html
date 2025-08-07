@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<div class="container">
+    {% if data['status'] == 200 %}
+    <form method="post" class="form" id="edit-form">
+    <div class="section title">
+        <span class="title-h2">{{ data['body']['setor'] }}</span>
+        
+        <div class="right-align">
+            <a href="../ver/{{data['body']['id']}}" class="btn">Voltar</a>
+        </div>
+    </div>
+    <hr>
+    <div class="section form-group">
+        <span class="bolder-text">Descrição:</span>
+        <input type="text" class="form-text" name="description" id="description" value="{{ data['body']['description'] }}">
+    </div>
+    <hr>
+
+    <div class="section container">
+        <div class="row">
+            <div class="col">
+                <div class="container date-container">
+                    <span class="bolder-text">Data de emissão:</span>
+                    <span>{{ data['body']['data_emissao'] }}</span>
+                </div>
+                <div class="container date-container">
+                    {% if data['body']['status'] == 'Finalizado' %}
+                        <span class="bolder-text">Data conclusão:</span>
+                        <span>{{ data['body']['data_conclusao'] }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="container">
+                    <span class="bolder-text">Prioridade:</span>
+                    <select name="priority" id="priority" class="form-text lil-form">
+                        <option value="0" {% if data['body']['priority'] == 0 %}selected{% endif %}>0</option>
+                        <option value="1" {% if data['body']['priority'] == 1 %}selected{% endif %}>1</option>
+                    </select>
+                </div>
+                <div class="container">
+                    <span class="bolder-text">Status:</span>
+                    <select name="status" id="status" class="form-text lil-form">
+                        <option value="A analisar" {% if data['body']['status'] == "A analisar" %}selected{% endif %}>A analisar</option>
+                        <option value="Vizualizado" {% if data['body']['status'] == "Vizualizado" %}selected{% endif %}>Vizualizado</option>
+                        <option value="Em Vistoria" {% if data['body']['status'] == "Em Vistoria" %}selected{% endif %}>Em Vistoria</option>
+                        <option value="Finalizado" {% if data['body']['status'] == "Finalizado" %}selected{% endif %}>Finalizado</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container right-align">
+        {% if data['body']['status'] != 'Finalizado' %}
+          <button type="submit" class="btn" onclick="enviarPara(`/finalizar/{{data['body']['id']}}`)">Marcar como concluído</button>
+        {% endif %}
+        <button type="submit" class="btn" id="btnRedirect" onclick="enviarPara(`/edicao/salvar/{{data['body']['id']}}`)">Salvar edições</button>
+    </div>
+    </form>
+
+    <hr/>
+
+    <div class="container right-align">
+        <div>
+            <a href="#" class="btn btn-del" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" data-id="{{ data['body']['id'] }}">
+                Deletar requisição
+            </a>
+        </div>
+    </div>
+    </hr>
+    <div class="section">
+        <span class="bolder-text">Comentários:</span><br>
+        <ul id="comments-list" class="comments-list">
+            {% if data['body']['comments'] %}
+                {% for comment in comentarios %}
+                    <li class="comment">{{ comment|e }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="modalConfirmacao" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Confirmar exclusão</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        
+        <div class="modal-body">
+            <p class="space">Tem certeza que deseja apagar esta requisição?</p>
+
+            <p>{{ data['body']['setor'] }} - {{ data['body']['status'] }}</p>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <a href="#" id="btn-confirmar-exclusao" class="btn btn-del">Deletar</a>
+        </div>
+        
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById('modalConfirmacao');
+            const btnConfirmar = document.getElementById('btn-confirmar-exclusao');
+
+            modal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget; // Botão que abriu o modal
+                const id = button.getAttribute('data-id');
+
+                // Define a URL do botão de confirmação
+                btnConfirmar.setAttribute('href', `/delete/${id}`);
+            });
+        });
+        function enviarPara(url) {
+            const form = document.getElementById('edit-form');
+            form.action = url;
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<div class="container right-align">
+    <a href="/" class="btn">Voltar</a>
+</div>
+<div class="container">
+    <form action="/registro/salvar" class="form" method="post">
+        <div class="form-group">
+            <label for="setor">Setor solicitante:</label><br>
+            <input type="text" name="setor" id="setor" class="form-text" autocomplete="off" required placeholder="Identifique de onde você está solicitando">
+        </div>
+        <div class="form-group">
+            <label for="setor">Solicitante:</label><br>
+            <input type="text" name="nome_requisitante" id="nome_requisitante" class="form-text" autocomplete="off" required placeholder="Insira seu nome">
+        </div>
+        <div class="form-group description-box">
+            <label for="description">Descrição do problema:</label><br>
+            <textarea name="description" id="description"  class="form-text" cols="30" rows="10" required placeholder="Insira uma breve descrição do que está acontecendo"></textarea>
+        </div>
+        <div class="form-button">
+            <button type="submit" class="btn">Enviar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

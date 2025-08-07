@@ -1,0 +1,208 @@
+:root {
+    /* Cores */
+    --main-color: #00A629;
+    --second-color: #036939;
+    --btn-color: #004AAD;
+    --danger-color: #c82333;
+    --dark-color: #141414;
+    --gray-color: #cccccc;
+    --light-color: #f0ffff;
+}
+*{
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    cursor: default;
+}
+/* ---> HEADER <---*/
+header {
+    background-color: var(--main-color);
+    border-bottom: var(--dark-color) 1px solid;
+    box-shadow: 0 2px 2px #0000004d;
+    margin-bottom: 2vh;
+}
+.image-logo {
+    height: 120px;
+    transition: transform 0.2s ease;
+}
+.img-container{
+    padding: 10px;
+    background-color: white;
+    border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+}
+.image-logo:hover {
+    transform: scale(1.05);
+}
+.tec-imagem {
+    width: 200px;
+    align-self: center;
+}
+/* fim do HEADER */
+
+/* ---> ÁREAS <--- */
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding: 1vh 1vw;
+}
+.row {
+    display:flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: end;
+    margin: auto;
+}
+.box {
+    background-color: var(--gray-color);
+    border: var(--dark-color) 2px solid;
+    height: 50vh;
+    border-radius: 20px;
+    margin: auto;
+}
+.section {
+    width: 100%;
+    margin: 1vh 2vw 2vh;
+}
+.section-grid {
+    display: grid;
+}
+.section-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 70vw;
+}
+.date-container {
+    height: 10vh;
+}
+.img-tec{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.right-align{
+    display: flex;
+    justify-content: flex-end;
+    padding: 14px 28px;
+}
+.space {
+    margin-bottom: 2vh;
+}
+/* fim das ÁREAS */
+
+/* ---> TEXTS <--- */
+.enfase {
+    display: block;
+    color: var(--second-color);
+    font-weight: 800;
+    font-size: 20px;
+    width: 20vw;
+    text-align: right;
+    margin-bottom: 2vh;
+    margin-left: auto;
+}
+.enfase-tec {
+    display: block;
+    color: var(--btn-color);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 6px;
+    background-color: white;
+    border-radius: 30px;
+    margin-top: 3px;
+}
+h2{
+    text-transform: capitalize;
+}
+.bolder-text {
+    font-weight: 600;
+    margin-right: 8px;
+}
+.discription {
+    padding: 2vh 2vw;
+}
+.title-h2 {
+    font-size: 34px;
+    font-weight: 600;
+}
+.title {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+/* fim dos TEXTS */
+
+/* ---> LISTAS <--- */
+.lista-requisicoes{
+    display: flex;
+    flex-direction: column; /* garantir lista vertical */
+    max-height: 48vh; /* assume cada item com ~2.5em de altura */
+    overflow-y: auto;
+    padding: 20px 12px;
+    gap: 10px;
+}
+.item-list-req{
+    width: 100%;
+    height: 40px;
+    padding: 1vh 2vw;
+    background-color: var(--light-color);
+    border-radius: 12px;
+    border: 2px solid #0000004d;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    .item-list{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 50vw;
+    }
+}
+.item-finalizado{
+    opacity: .5;
+}
+.prioridade {
+    border: 2px solid var(--danger-color) !important
+}
+/* ---> fim das LISTAS <--- */
+
+/* ---> UTILS <--- */
+.last {
+    display: contents;
+}
+.effects-area{
+    display: flex;
+    gap: 8vw;
+    padding: 0 30px;
+}
+.label-switch {
+    padding-top: 5px;
+}
+hr {
+    margin: 4vh 0;
+}
+/* fim do UTILS */
+
+/* ---> COMMENTS <--- */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 2vh 2vw;
+    .comment {
+        background-color: var(--gray-color);
+        border-radius: 0 20px 20px;
+        padding: 10px;
+        padding-left: 20px;
+        border-bottom: #0000004d 1px solid;
+        white-space: pre-wrap;
+    }
+}
+#comment {
+    height: 10vh;
+    width: calc(100% - 1vw);
+    resize: none;
+}
+/* fim do COMMENTS */

@@ -1,0 +1,38 @@
+@media only screen and (max-width: 992px) {
+    * {
+        font-size: 14px;
+    }
+    .image-logo {
+        width: 150px;
+        height: 70px;
+        transition: transform 0.2s ease;
+    }
+    .enfase{
+        font-size: 16px;
+        width: 30vw;
+    }
+    .row {
+        flex-wrap: wrap;
+    }
+    .last{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .last a .btn {
+        margin-top: 2vw;
+    }
+    .effects-area {
+        gap: 0;
+        justify-content: space-between;
+    }
+    #comment {
+        height: 20vh;
+    }
+    .form-text {
+        font-size: .9rem;
+        height: 8vh;
+    }
+    .hide-on-mobile {
+        display: none
+    }
+}

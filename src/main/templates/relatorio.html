@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<div class="container">
+    <div class="container right-align">
+        <button class="btn btn-primary" id="btn-download">Baixar Relatório</button>
+        <a href="/" class="btn">Voltar</a>
+    </div>
+    <form id="filtro-form">
+        <div class="effects-area">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="radio" name="radio-casos" id="casos_encerrados">
+                <label class="label-switch" for="casos_encerrados">
+                    Visualizar apenas casos encerrados
+                </label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="radio" name="radio-casos" id="casos_abertos">
+                <label class="label-switch" for="casos_abertos">
+                Visualizar apenas casos abertos
+            </label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="desse_mes">
+                <label class="label-switch" for="desse_mes">
+                    Visualizar apenas desse mês
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="space"></div>
+    {% if data['status'] == 200 %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Prioridade</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Data de emissão</th>
+                    <th scope="col">Data de finalização</th>
+                    <th scope="col">Requerente</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-corpo">
+            {% for dt in data['body'] %}
+                <tr data-status="{{ dt[5] }}" data-finalizacao="{{ dt[7] }}" data-emissao="{{ dt[6] }}">
+                    <td>{{ dt[1] }}</td>
+                    <td>{{ dt[2] }}</td>
+                    <td>{{ dt[4] }}</td>
+                    <td>{{ dt[5] }}</td>
+                    <td>{{ dt[6] }}</td>
+                    <td>{{ dt[7] }}</td>
+                    <td>{{ dt[8] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+
+<script>
+    // Função para filtrar os dados com base nos checkboxes
+    document.getElementById("filtro-form").addEventListener("change", function() {
+        let casosEncerrados = document.getElementById("casos_encerrados").checked;
+        let casosAbertos = document.getElementById("casos_abertos").checked;
+        let desseMes = document.getElementById("desse_mes").checked;
+        
+        let rows = document.querySelectorAll("#tabela-corpo tr");
+        
+        rows.forEach(row => {
+            let status = row.getAttribute("data-status");
+            let dataEmissao = row.getAttribute("data-emissao");
+            let dataFinalizacao = row.getAttribute("data-finalizacao");
+
+            // Filtrando baseado nas opções selecionadas
+            let mostrar = true;
+
+            // Filtrar casos encerrados
+            if (casosEncerrados && status !== 'Finalizado') {
+                mostrar = false;
+            }
+
+            if (casosAbertos && status == 'Finalizado') {
+                mostrar = false;
+            }
+
+            // Filtrar desse mês
+            if (desseMes) {
+                let partes = dataEmissao.split('-'); // ["05", "08", "2025"]
+                let dia = parseInt(partes[0], 10);
+                let mes = parseInt(partes[1], 10) - 1; // Mês no JS começa em 0
+                let ano = parseInt(partes[2], 10);
+
+                let dataEmissaoDate = new Date(ano, mes, dia);
+                let mesAtual = new Date().getMonth();
+                let anoAtual = new Date().getFullYear();
+
+                // Se a data de emissão não for do mês e ano atual, ocultar
+                if (dataEmissaoDate.getFullYear() !== anoAtual || dataEmissaoDate.getMonth() !== mesAtual) {
+                    mostrar = false;
+                }
+            }
+
+            row.style.display = mostrar ? "" : "none"; // Mostrar ou esconder a linha
+        });
+    });
+
+// Função para gerar o link de download com os filtros aplicados
+    document.getElementById('btn-download').addEventListener('click', function() {
+        // Pega os valores dos filtros
+        let casosEncerrados = document.getElementById("casos_encerrados").checked;
+        let casosAbertos = document.getElementById("casos_abertos").checked;
+        let desseMes = document.getElementById("desse_mes").checked;
+
+        // Cria a URL com os filtros aplicados
+        let url = '/download?';
+        if (casosEncerrados) {
+            url += 'casos_encerrados=true&';
+        }
+        if (casosAbertos) {
+            url += 'casos_abertos=true&';
+        }
+        if (desseMes) {
+            url += 'desse_mes=true&';
+        }
+        
+        // Remove o último "&" caso exista
+        url = url.endsWith('&') ? url.slice(0, -1) : url;
+
+        // Redireciona o usuário para o endpoint de download
+        window.location.href = url;
+    });
+
+
+</script>
+{% endblock %}

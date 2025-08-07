@@ -1,0 +1,68 @@
+@media only screen and (max-width: 600px) {
+    * {
+        font-size: 12px;
+    }
+    .image-logo {
+        width: 100px;
+        height: 60px;
+        transition: transform 0.2s ease;
+    }
+    .img-container{
+        width: 150px;
+    }
+    .enfase{
+        font-size: 12px;
+        width: 45vw;
+    }
+    .enfase-tec{
+        font-size: 6px;
+        text-align: center;
+    }
+    .btn{
+        font-size: 12px;
+        margin: .5vh .5vw;
+    }
+    .btn-small{
+        font-size: 10px;
+        padding: 1vh 1.5vw;
+    }
+    .label-switch {
+        padding-top: 0;
+    }
+    .right-align{
+        padding: 0 16px;
+    }
+    .form-text {
+        font-size: 0.8rem;
+    }
+    .form-button {
+        padding: 10px 20px;
+    }
+    .section{
+        width: auto;
+    }
+    .title{
+        height: 12vh;
+    }
+    .effects-area{
+        justify-content: space-between;
+        gap: 6vw;
+        margin-left: 4vw;
+    }
+    .form-check{
+        margin: auto;
+    }
+    .date-container {
+        height: 6vh;
+    }
+    .form {
+        padding: 0.5vh 1vw;
+    }
+    .row {
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .last {
+        margin-bottom: 2vh;
+    }
+}

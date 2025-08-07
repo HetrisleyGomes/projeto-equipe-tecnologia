@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<div class="container">
+    <div class="row">
+        <div class="col last">
+            <a href="/relatorio"><input type="button" class="btn" value="Visualizar registros"></a>
+            <a href="/registro"><input type="button" class="btn" value="Adicionar nova requisição"></a>
+        </div>
+        <div class="col">
+            <div class="effects-area">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="inverter_ordem">
+                    <label for="inverter_ordem" class="label-switch">Inverter ordem</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="mostrar_prioridades" {% if mostrar_prioridades %}checked{% endif %}>
+                    <label for="mostrar_prioridades" class="label-switch">Mostrar prioridades</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="mostrar_finalizados" {% if mostrar_finalizados %}checked{% endif %}>
+                    <label for="mostrar_finalizados" class="label-switch">Mostrar finalizados</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="box">
+        {% if data['status'] == 200 %}
+        <ol class="lista-requisicoes">
+            {% for dt in data['body'] %}
+            <li class="item-list-req">
+            </li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Função para atualizar a lista de requisições
+        function updateList(inverterOrdem, mostrarPrioridades, mostrarFinalizados) {
+            $.ajax({
+                url: '/atualizar_lista',
+                type: 'GET',
+                data: { inverter_ordem: inverterOrdem, mostrar_prioridades: mostrarPrioridades, mostrar_finalizados: mostrarFinalizados },
+                success: function(response) {
+                    var lista = $('.lista-requisicoes');
+                    lista.empty();
+                    response.body.forEach(function(dt) {
+                        lista.append(`
+                            <li class="item-list-req ${dt[5] == "Finalizado" ? `item-finalizado` : ''} ${dt[4] == 1 ? 'prioridade': ''}">
+                                <div class="item-list">
+                                    <span>${dt[1]}</span>
+                                    <span class="hide-on-mobile">${dt[2]}</span>
+                                    <span>${dt[6]} ${dt[5] == "Finalizado" ? `| <strong>${dt[7]}</strong>` : ''}</span>
+                                    
+                                </div>
+                                <div class="action-btns">
+                                    <a href="/ver/${dt[0]}"><input type="button" value="Ver detalhes" class="btn btn-small"></a>
+                                </div>
+                            </li>
+                        `);
+                    });
+                }
+            });
+        }
+
+        // Carregar a lista ao carregar a página
+        updateList(false, true, false);
+
+        // Evento de mudança nos checkboxes
+        $('#inverter_ordem, #mostrar_prioridades, #mostrar_finalizados').change(function() {
+            var inverterOrdem = $('#inverter_ordem').is(':checked');
+            var mostrarPrioridades = $('#mostrar_prioridades').is(':checked');
+            var mostrarFinalizados = $('#mostrar_finalizados').is(':checked');
+            updateList(inverterOrdem, mostrarPrioridades, mostrarFinalizados);
+        });
+    });
+    // Conecte-se ao servidor SocketIO
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    socket.on('update', function() {
+        updateRequests();
+    });
+    function updateRequests() {
+        location.reload()
+    }
+</script>
+{% endblock %}
