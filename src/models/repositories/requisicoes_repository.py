@@ -44,7 +44,7 @@ class RequisicoesRepository:
         cursor = self.__conn.cursor()
         cursor.execute(
             """
-                SELECT * FROM requisicoes WHERE id = ?
+                SELECT * FROM requisicoes WHERE id = %s
             """,
             (id,),
         )
@@ -56,7 +56,7 @@ class RequisicoesRepository:
         cursor = self.__conn.cursor()
 
         # Recuperar a lista de comentários existente
-        cursor.execute("SELECT comments FROM requisicoes WHERE id = ?", (id,))
+        cursor.execute("SELECT comments FROM requisicoes WHERE id = %s", (id,))
         result = cursor.fetchone()
         if result:
             comentarios_json = result[0]
@@ -82,7 +82,7 @@ class RequisicoesRepository:
 
         # Atualizar o registro com os comentários modificados
         cursor.execute(
-            "UPDATE requisicoes SET comments = ? WHERE id = ?", (comentarios_json, id)
+            "UPDATE requisicoes SET comments = %s WHERE id = %s", (comentarios_json, id)
         )
 
         self.__conn.commit()
@@ -93,7 +93,7 @@ class RequisicoesRepository:
         cursor = self.__conn.cursor()
 
         cursor.execute(
-            "UPDATE requisicoes SET description = ?, priority = ?, status = ? WHERE id = ?",
+            "UPDATE requisicoes SET description = %s, priority = %s, status = %s WHERE id = %s",
             (   
                 description,
                 propriety,
@@ -109,7 +109,7 @@ class RequisicoesRepository:
         cursor = self.__conn.cursor()
 
         cursor.execute(
-            'UPDATE requisicoes SET data_conclusao = ?, priority = 0, status = "Finalizado" WHERE id = ?',
+            'UPDATE requisicoes SET data_conclusao = %s, status = "Finalizado" WHERE id = %s',
             (
                 data_atual,
                 id,
@@ -130,7 +130,7 @@ class RequisicoesRepository:
         cursor = self.__conn.cursor()
 
         cursor.execute(
-            "DELETE FROM requisicoes WHERE id = ?",
+            "DELETE FROM requisicoes WHERE id = %s",
             (id,)
         )
 
