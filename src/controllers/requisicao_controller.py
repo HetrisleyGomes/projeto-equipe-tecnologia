@@ -15,7 +15,7 @@ class RequisicaoController:
                 "id": id,
                 "setor": body["setor"],
                 "description": body["description"],
-                "priority": 0,
+                "priority": body["prioridade"],
                 "status": "A analisar",
                 "data_emissao": data_atual,
                 "nome_requisitante": body["nome_requisitante"],

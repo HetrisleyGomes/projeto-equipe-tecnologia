@@ -52,10 +52,9 @@
                         lista.append(`
                             <li class="item-list-req ${dt[5] == "Finalizado" ? `item-finalizado` : ''} ${dt[4] == 1 ? 'prioridade': ''}">
                                 <div class="item-list">
-                                    <span>${dt[1]}</span>
+                                    <span>${dt[1]} - ${dt[8]}</span>
                                     <span class="hide-on-mobile">${dt[2]}</span>
                                     <span>${dt[6]} ${dt[5] == "Finalizado" ? `| <strong>${dt[7]}</strong>` : ''}</span>
-                                    
                                 </div>
                                 <div class="action-btns">
                                     <a href="/ver/${dt[0]}"><input type="button" value="Ver detalhes" class="btn btn-small"></a>

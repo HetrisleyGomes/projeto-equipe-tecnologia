@@ -43,12 +43,14 @@ def salvar_registro():
     setor = request.form.get("setor")
     description = request.form.get("description")
     nome_requisitante = request.form.get("nome_requisitante")
+    prioridade = request.form.get("prioridade")
     repository = RequisicoesRepository(db_connection_handler.get_connection())
     controller = RequisicaoController(repository)
     body = {
         "setor": setor,
         "description": description,
         "nome_requisitante": nome_requisitante,
+        "prioridade": prioridade,
     }
     data = controller.create(body)
     socketio.emit("update")

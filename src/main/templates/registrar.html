@@ -6,7 +6,7 @@
 <div class="container">
     <form action="/registro/salvar" class="form" method="post">
         <div class="form-group">
-            <label for="setor">Setor solicitante:</label><br>
+            <label for="setor">Secretaria:</label><br>
             <input type="text" name="setor" id="setor" class="form-text" autocomplete="off" required placeholder="Identifique de onde você está solicitando">
         </div>
         <div class="form-group">
@@ -16,6 +16,13 @@
         <div class="form-group description-box">
             <label for="description">Descrição do problema:</label><br>
             <textarea name="description" id="description"  class="form-text" cols="30" rows="10" required placeholder="Insira uma breve descrição do que está acontecendo"></textarea>
+        </div>
+        <div class="container">
+            <span class="bolder-text">Prioridade:</span>
+            <select name="prioridade" id="prioridade" class="form-text lil-form">
+                <option value="0" selected>0</option>
+                <option value="1">1</option>
+            </select>
         </div>
         <div class="form-button">
             <button type="submit" class="btn">Enviar</button>
