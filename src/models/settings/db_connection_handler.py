@@ -7,6 +7,11 @@ class DbConnectionHandler:
     def __init__(self) -> None:
         self.__connection_string = os.getenv("DATABASE_URL")
         self.__conn = None
+        database_url = os.getenv("DATABASE_URL")
+        if database_url:
+            print(f"DATABASE_URL carregado: {database_url}")
+        else:
+            print("DATABASE_URL NÃO foi carregado.")
 
     def connect(self) -> None:
         conn = sqlite3.connect(self.__connection_string, check_same_thread=False)
