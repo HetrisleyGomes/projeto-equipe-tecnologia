@@ -127,7 +127,7 @@
     });
 
     // Conecte-se ao servidor SocketIO
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var socket = io.connect('https://registro-suporte-ma.onrender.com/');
     console.log(socket)
     // Evento de conexão
     socket.on('connect', function() {
