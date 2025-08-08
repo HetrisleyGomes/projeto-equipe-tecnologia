@@ -53,7 +53,7 @@ def salvar_registro():
         "prioridade": prioridade,
     }
     data = controller.create(body)
-    socketio.emit("update")
+    socketio.emit("update", broadcast=True)
     return redirect(url_for("main_bp.index"))
 
 
@@ -85,7 +85,7 @@ def adicionar_comentario():
     controller = RequisicaoController(repository)
     response_data = controller.update_comments(id, comment)
     socket_data = {"comment": comment}
-    socketio.emit("update", socket_data)
+    socketio.emit("update", socket_data, broadcast=True)
     return jsonify({"comment": comment})
 
 @main_bp.route("/relatorio")
@@ -167,7 +167,7 @@ def edit_salvar_registro(id):
     if status == "Finalizado":
         return redirect(url_for("main_bp.finalizar_registro", id=id))
     
-    socketio.emit("update")
+    socketio.emit("update", broadcast=True)
     return redirect(url_for("main_bp.find_registro", id=id))
 
 
@@ -212,7 +212,7 @@ def delete_registro(id):
     repository = RequisicoesRepository(db_connection_handler.get_connection())
     controller = RequisicaoController(repository)
     controller.delete_by_id(id)
-    socketio.emit("update")
+    socketio.emit("update", broadcast=True)
     return redirect(url_for("main_bp.index"))
 
 @main_bp.route("/update_request/<int:request_id>", methods=["POST"])
