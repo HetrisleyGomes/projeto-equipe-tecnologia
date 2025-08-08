@@ -1,15 +1,18 @@
-import sqlite3
-from sqlite3 import Connection
-
+import os
+import psycopg2
+from psycopg2.extensions import connection as Connection
 
 class DbConnectionHandler:
     def __init__(self) -> None:
-        self.__connection_string = "storage.db"
+        # Pega a string de conexão do ambiente (Render → Environment Variable)
+        self.__connection_string = os.getenv("DATABASE_URL")
         self.__conn = None
 
     def connect(self) -> None:
-        conn = sqlite3.connect(self.__connection_string, check_same_thread=False)
-        self.__conn = conn
+        try:
+            self.__conn = psycopg2.connect(self.__connection_string)
+        except Exception as e:
+            print(f"Erro ao conectar no PostgreSQL: {e}")
 
     def get_connection(self) -> Connection:
         return self.__conn
