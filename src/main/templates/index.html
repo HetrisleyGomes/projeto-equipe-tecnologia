@@ -50,14 +50,14 @@
                     lista.empty();
                     response.body.forEach(function(dt) {
                         lista.append(`
-                            <li class="item-list-req ${dt[5] == "Finalizado" ? `item-finalizado` : ''} ${dt[4] == 1 ? 'prioridade': ''}">
+                            <li class="item-list-req ${dt['status'] == "Finalizado" ? `item-finalizado` : ''} ${dt['priority'] == 1 ? 'prioridade': ''}">
                                 <div class="item-list">
-                                    <span>${dt[1]} - ${dt[8]}</span>
-                                    <span class="hide-on-mobile">${dt[2]}</span>
-                                    <span>${dt[6]} ${dt[5] == "Finalizado" ? `| <strong>${dt[7]}</strong>` : ''}</span>
+                                    <span>${dt['setor']} - ${dt['nome_requisitante']}</span>
+                                    <span class="hide-on-mobile">${dt['description']}</span>
+                                    <span>${dt['data_emissao']} ${dt['status'] == "Finalizado" ? `| <strong>${dt['data_conclusao']}</strong>` : ''}</span>
                                 </div>
                                 <div class="action-btns">
-                                    <a href="/ver/${dt[0]}"><input type="button" value="Ver detalhes" class="btn btn-small"></a>
+                                    <a href="/ver/${dt['id']}"><input type="button" value="Ver detalhes" class="btn btn-small"></a>
                                 </div>
                             </li>
                         `);

@@ -11,12 +11,11 @@ class DbConnectionHandler:
         self.__conn = None
 
         if self.__connection_string:
-            print(f"DATABASE_URL carregado: {self.__connection_string}")
+            print("DATABASE_URL carregado.")
         else:
             print("DATABASE_URL NÃO foi carregado.")
 
     def connect(self) -> None:
-        print("Connection string:", self.__connection_string)
         try:
             # Aqui conectamos ao PostgreSQL com psycopg2
             self.__conn = psycopg2.connect(self.__connection_string)
