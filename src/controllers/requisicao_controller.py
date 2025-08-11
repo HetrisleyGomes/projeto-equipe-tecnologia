@@ -11,8 +11,6 @@ class RequisicaoController:
         try:
             id = str(uuid.uuid4())
             data_atual = datetime.today().strftime("%m-%d-%Y")
-            print('veioooo')
-            print(data_atual)
             requisition_infos = {
                 "id": id,
                 "setor": body["setor"],
@@ -22,7 +20,6 @@ class RequisicaoController:
                 "data_emissao": data_atual,
                 "nome_requisitante": body["nome_requisitante"],
             }
-            print(requisition_infos)
             self.__repository.registry_requisition(requisition_infos)
 
             return {
