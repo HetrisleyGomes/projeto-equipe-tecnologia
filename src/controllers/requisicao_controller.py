@@ -10,7 +10,9 @@ class RequisicaoController:
     def create(self, body) -> Dict:
         try:
             id = str(uuid.uuid4())
-            data_atual = datetime.datetime.today().strftime("%d-%m-%Y")
+            data_atual = datetime.today().strftime("%d-%m-%Y")
+            print('veioooo')
+            print(data_atual)
             requisition_infos = {
                 "id": id,
                 "setor": body["setor"],
@@ -20,7 +22,7 @@ class RequisicaoController:
                 "data_emissao": data_atual,
                 "nome_requisitante": body["nome_requisitante"],
             }
-
+            print(requisition_infos)
             self.__repository.registry_requisition(requisition_infos)
 
             return {
@@ -104,7 +106,7 @@ class RequisicaoController:
 
     def finalizar(self, id) -> Dict:
         try:
-            data_atual = datetime.datetime.today().strftime("%d-%m-%Y")
+            data_atual = datetime.today().strftime("%d-%m-%Y")
             self.__repository.finalizar_requisition(id, data_atual)
             data = id
             return {"body": data, "status": 200}

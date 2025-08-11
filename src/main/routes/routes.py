@@ -52,6 +52,7 @@ def salvar_registro():
         "nome_requisitante": nome_requisitante,
         "prioridade": prioridade,
     }
+    print(body)
     data = controller.create(body)
     socketio.emit("update")
     return redirect(url_for("main_bp.index"))
