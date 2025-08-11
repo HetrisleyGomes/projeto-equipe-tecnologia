@@ -1,5 +1,6 @@
 from typing import Tuple, Dict, List
-from sqlite3 import Connection
+from psycopg2.extensions import connection as Connection
+#from sqlite3 import Connection
 import json
 
 
@@ -107,15 +108,17 @@ class RequisicoesRepository:
 
     def finalizar_requisition(self, id, data_atual) -> None:
         cursor = self.__conn.cursor()
-
+        print('veio requisition')
+        
         cursor.execute(
-            'UPDATE requisicoes SET data_conclusao = %s, status = "Finalizado" WHERE id = %s',
+            'UPDATE requisicoes SET data_conclusao = %s, status = %s WHERE id = %s',
             (
                 data_atual,
+                "Finalizado",
                 id,
             ),
         )
-
+        print(data_atual)
         self.__conn.commit()
         cursor.close()
 

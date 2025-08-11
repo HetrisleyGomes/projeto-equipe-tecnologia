@@ -176,6 +176,8 @@ def finalizar_registro(id):
     repository = RequisicoesRepository(db_connection_handler.get_connection())
     controller = RequisicaoController(repository)
 
+    print('teste')
+
     data = controller.finalizar(id)
     socketio.emit("update")
     return redirect(url_for("main_bp.index"))

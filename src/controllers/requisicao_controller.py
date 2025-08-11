@@ -102,10 +102,13 @@ class RequisicaoController:
             return {"body": {"error": e}, "status": 400}
 
     def finalizar(self, id) -> Dict:
+        print('veio')
         try:
-            data_atual = datetime.today().strftime("%d-%m-%Y")
+            data_atual = datetime.today().strftime("%m-%d-%Y")
+            print(data_atual)
             self.__repository.finalizar_requisition(id, data_atual)
             data = id
+            print('finalizou')
             return {"body": data, "status": 200}
         except Exception as e:
             return {"body": {"error": e}, "status": 400}
