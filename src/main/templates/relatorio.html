@@ -44,14 +44,14 @@
             </thead>
             <tbody id="tabela-corpo">
             {% for dt in data['body'] %}
-                <tr data-status="{{ dt[5] }}" data-finalizacao="{{ dt[7] }}" data-emissao="{{ dt[6] }}">
-                    <td>{{ dt[1] }}</td>
-                    <td>{{ dt[2] }}</td>
-                    <td>{{ dt[4] }}</td>
-                    <td>{{ dt[5] }}</td>
-                    <td>{{ dt[6] }}</td>
-                    <td>{{ dt[7] }}</td>
-                    <td>{{ dt[8] }}</td>
+                <tr data-status="{{ dt['status'] }}" data-finalizacao="{{ dt['data_conclusao'] }}" data-emissao="{{ dt['data_emissao'] }}">
+                    <td>{{ dt['setor'] }}</td>
+                    <td>{{ dt['description'] }}</td>
+                    <td>{{ dt['priority'] }}</td>
+                    <td>{{ dt['status'] }}</td>
+                    <td>{{ dt['data_emissao'] }}</td>
+                    <td>{{ dt['data_conclusao'] }}</td>
+                    <td>{{ dt['nome_requisitante'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>

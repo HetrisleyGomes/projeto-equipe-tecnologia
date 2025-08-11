@@ -193,12 +193,12 @@ def atualizar_lista():
 
     # Filtrar dados com base no status
     filtered_data = [
-        item for item in data["body"] if mostrar_finalizados or item[5] != "Finalizado"
+        item for item in data["body"] if mostrar_finalizados or item['status'] != "Finalizado"
     ]
 
     # Filtrar dados com base na prioridade, ordena com prioridade 1 primeiro
     if mostrar_prioridades:
-        filtered_data.sort(key=lambda x: 0 if x[4] == 1 else 1)
+        filtered_data.sort(key=lambda x: 0 if x['priority'] == 1 else 1)
 
     # Ordenar os dados filtrados
     sorted_data = filtered_data
