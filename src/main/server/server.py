@@ -1,13 +1,14 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
-socketio = SocketIO(app)
-
+CORS(app, origins=["*"])
+socketio = SocketIO(app, cors_allowed_origins=["https://registro-suporte-ma.onrender.com", "http://172.20.9.251:5000"])
 
 @socketio.on("connect")
 def handle_connect():
-    print("Client connected")
+    print("Client connected", request.sid)
 
 
 @socketio.on("disconnect")

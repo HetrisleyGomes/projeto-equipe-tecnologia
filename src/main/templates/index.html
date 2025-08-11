@@ -80,7 +80,7 @@
     // Conecte-se ao servidor SocketIO
     var socket = io.connect('https://registro-suporte-ma.onrender.com/');
     socket.on('update', function() {
-        updateRequests();
+        updateRequests()
     });
     function updateRequests() {
         location.reload()
