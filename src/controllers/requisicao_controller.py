@@ -10,7 +10,7 @@ class RequisicaoController:
     def create(self, body) -> Dict:
         try:
             id = str(uuid.uuid4())
-            data_atual = datetime.today().strftime("%d-%m-%Y")
+            data_atual = datetime.today().strftime("%m-%d-%Y")
             print('veioooo')
             print(data_atual)
             requisition_infos = {
