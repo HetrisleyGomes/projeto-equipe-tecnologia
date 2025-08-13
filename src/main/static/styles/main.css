@@ -81,7 +81,7 @@ header {
 .img-tec{
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
 }
 .right-align{
     display: flex;
@@ -108,7 +108,7 @@ header {
     display: block;
     color: var(--btn-color);
     font-weight: 600;
-    font-size: 16px;
+    font-size: 1rem;
     padding: 6px;
     background-color: white;
     border-radius: 30px;
