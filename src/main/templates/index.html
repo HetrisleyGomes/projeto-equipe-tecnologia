@@ -52,9 +52,9 @@
                         lista.append(`
                             <li class="item-list-req ${dt['status'] == "Finalizado" ? `item-finalizado` : ''} ${dt['priority'] == 1 ? 'prioridade': ''}">
                                 <div class="item-list">
-                                    <span>[${dt['setor']}] - ${dt['nome_requisitante']}</span>
+                                    <span class="setor-req">[${dt['setor']}] - ${dt['nome_requisitante']}</span>
                                     <span class="hide-on-mobile">${dt['description']}</span>
-                                    <span>${dt['data_emissao']} ${dt['status'] == "Finalizado" ? `| <strong>${dt['data_conclusao']}</strong>` : ''}</span>
+                                    <span class="date-width">${dt['data_emissao']} ${dt['status'] == "Finalizado" ? `| <strong>${dt['data_conclusao']}</strong>` : ''}</span>
                                 </div>
                                 <div class="action-btns">
                                     <a href="/ver/${dt['id']}"><input type="button" value="Ver detalhes" class="btn btn-small"></a>

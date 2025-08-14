@@ -158,8 +158,7 @@ h2{
     .item-list{
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        width: 50vw;
+        width: 60vw;
     }
 }
 .item-finalizado{
@@ -167,6 +166,17 @@ h2{
 }
 .prioridade {
     border: 2px solid var(--danger-color) !important
+}
+.date-width {
+    min-width: 12%;
+    max-width: 25%;
+}
+.hide-on-mobile{
+    width: 100%;
+    padding: 0 10px;
+}
+.setor-req {
+    width: 50%;
 }
 /* ---> fim das LISTAS <--- */
 
