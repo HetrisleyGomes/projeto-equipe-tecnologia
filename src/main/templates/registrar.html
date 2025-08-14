@@ -7,7 +7,22 @@
     <form action="/registro/salvar" class="form" method="post">
         <div class="form-group">
             <label for="setor">Secretaria:</label><br>
-            <input type="text" name="setor" id="setor" class="form-text" autocomplete="off" required placeholder="Identifique de onde você está solicitando">
+            <select class="form-text" required name="setor" id="setor">
+                <option value="" disabled selected hidden>Identifique de onde você está solicitando</option>
+                <option value="Administração">Administração</option>
+                <option value="Assistência">Assistência</option>
+                <option value="Cultura">Cultura</option>
+                <option value="Educação">Educação</option>
+                <option value="Esporte">Esporte</option>
+                <option value="Habitação">Habitação</option>
+                <option value="Indústria e comércio">Indústria e comércio</option>
+                <option value="Infraestrutura">Infraestrutura</option>
+                <option value="Meio Ambiente">Meio Ambiente</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Segurança">Segurança</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Outros">Outros</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="setor">Solicitante:</label><br>

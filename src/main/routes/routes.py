@@ -41,6 +41,7 @@ def registrar():
 @main_bp.route("/registro/salvar", methods=["POST"])
 def salvar_registro():
     setor = request.form.get("setor")
+    print(setor)
     description = request.form.get("description")
     nome_requisitante = request.form.get("nome_requisitante")
     prioridade = request.form.get("prioridade")

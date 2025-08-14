@@ -113,6 +113,7 @@ header {
     background-color: white;
     border-radius: 30px;
     margin-top: 3px;
+    text-align: center;
 }
 h2{
     text-transform: capitalize;
