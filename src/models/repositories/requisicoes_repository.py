@@ -108,7 +108,6 @@ class RequisicoesRepository:
 
     def finalizar_requisition(self, id, data_atual) -> None:
         cursor = self.__conn.cursor()
-        print('veio requisition')
         
         cursor.execute(
             'UPDATE requisicoes SET data_conclusao = %s, status = %s WHERE id = %s',
@@ -118,7 +117,6 @@ class RequisicoesRepository:
                 id,
             ),
         )
-        print(data_atual)
         self.__conn.commit()
         cursor.close()
 

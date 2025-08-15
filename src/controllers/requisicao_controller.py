@@ -102,13 +102,10 @@ class RequisicaoController:
             return {"body": {"error": e}, "status": 400}
 
     def finalizar(self, id) -> Dict:
-        print('veio')
         try:
             data_atual = datetime.today().strftime("%m-%d-%Y")
-            print(data_atual)
             self.__repository.finalizar_requisition(id, data_atual)
             data = id
-            print('finalizou')
             return {"body": data, "status": 200}
         except Exception as e:
             return {"body": {"error": e}, "status": 400}
@@ -126,8 +123,6 @@ class RequisicaoController:
                 mes_atual = datetime.now().month
                 ano_atual = datetime.now().year
                 query += f" AND EXTRACT(MONTH FROM data_emissao) = {mes_atual} AND EXTRACT(YEAR FROM data_emissao) = {ano_atual}"
-            
-            print(query)
 
             data = self.__repository.get_custom_query(query)
 

@@ -1,6 +1,7 @@
 from flask import render_template, url_for, request, redirect, Blueprint, jsonify, send_file
 import json
 import csv
+import pandas as pd
 from io import StringIO, BytesIO
 
 from src.models.repositories.requisicoes_repository import RequisicoesRepository
@@ -41,7 +42,6 @@ def registrar():
 @main_bp.route("/registro/salvar", methods=["POST"])
 def salvar_registro():
     setor = request.form.get("setor")
-    print(setor)
     description = request.form.get("description")
     nome_requisitante = request.form.get("nome_requisitante")
     prioridade = request.form.get("prioridade")
@@ -119,19 +119,32 @@ def download():
 
     dados = controller.get_by_query(query_args)
 
-    # Gerar CSV
-    csv_buffer = StringIO()
-    writer = csv.writer(csv_buffer)
-    writer.writerow(['Nome', 'Descrição', 'Comentários', 'Prioridade', 'Status', 'Data de Emissão', 'Data de Finalização', 'Requerente'])
-
-    for row in dados['body']:
-        writer.writerow([row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]])
+    # Definir as colunas do relatório
+    colunas = ['Nome', 'Descrição', 'Comentários', 'Prioridade', 'Status', 'Data de Emissão', 'Data de Finalização', 'Requerente']
     
-    mem = BytesIO()
-    mem.write(csv_buffer.getvalue().encode('utf-8'))
-    mem.seek(0)
+    # Extrair apenas os dados relevantes
+    dados_para_df = [row[1:9] for row in dados['body']]
 
-    return send_file(mem, as_attachment=True, download_name='relatorio_requisicoes.csv', mimetype='text/csv')
+    # Criar um DataFrame do Pandas
+    df = pd.DataFrame(dados_para_df, columns=colunas)
+
+    # Criar um buffer de memória para salvar o arquivo Excel
+    excel_buffer = BytesIO()
+
+    # Salvar o DataFrame no buffer em formato Excel
+    # O index=False evita que o índice do DataFrame seja salvo como uma coluna
+    df.to_excel(excel_buffer, index=False, engine='openpyxl')
+
+    # Voltar o cursor para o início do buffer
+    excel_buffer.seek(0)
+
+    # Enviar o arquivo para o usuário
+    return send_file(
+        excel_buffer,
+        as_attachment=True,
+        download_name='relatorio_requisicoes.xlsx',
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
 
 @main_bp.route("/gerenciar/<id>")
@@ -176,8 +189,6 @@ def edit_salvar_registro(id):
 def finalizar_registro(id):
     repository = RequisicoesRepository(db_connection_handler.get_connection())
     controller = RequisicaoController(repository)
-
-    print('teste')
 
     data = controller.finalizar(id)
     socketio.emit("update")
