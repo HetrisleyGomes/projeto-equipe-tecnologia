@@ -45,7 +45,7 @@
                         <option value="A analisar" {% if data['body']['status'] == "A analisar" %}selected{% endif %}>A analisar</option>
                         <option value="Vizualizado" {% if data['body']['status'] == "Vizualizado" %}selected{% endif %}>Vizualizado</option>
                         <option value="Em Vistoria" {% if data['body']['status'] == "Em Vistoria" %}selected{% endif %}>Em Vistoria</option>
-                        <option value="Finalizado" {% if data['body']['status'] == "Finalizado" %}selected{% endif %}>Finalizado</option>
+                        {% if data['body']['status'] == "Finalizado" %}<option value="Finalizado" {% if data['body']['status'] == "Finalizado" %}selected{% endif %}>Finalizado</option>{% endif %}
                     </select>
                 </div>
             </div>
