@@ -72,4 +72,7 @@
     .date-width{
         width: 30%;
     }
+    .hide-on-mobile {
+        display: none;
+    }
 }
