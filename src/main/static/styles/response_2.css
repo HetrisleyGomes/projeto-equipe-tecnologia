@@ -33,6 +33,12 @@
         height: 8vh;
     }
     .hide-on-mobile {
-        display: none
+        width: 40%;
+    }
+    .setor-req {
+        width: 40%;
+    }
+    .date-width{
+        width: 20%;
     }
 }

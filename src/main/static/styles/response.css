@@ -65,4 +65,11 @@
     .last {
         margin-bottom: 2vh;
     }
+    .setor-req {
+        width: 60%;
+        margin-right: 10%;
+    }
+    .date-width{
+        width: 30%;
+    }
 }
