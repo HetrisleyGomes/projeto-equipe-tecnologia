@@ -59,6 +59,7 @@
                 <textarea name="comment" id="comment" class="form-text" cols="30" rows="3" required placeholder="Digite seu comentário"></textarea>
                 <input type="hidden" id="dados" name="dados" value="{{data['body']['id']}}">
                 <div class="form-button">
+                    <input type="text" name="remetente" id="remetente" class="form-text" placeholder="Remetente" autocomplete="off">
                     <button type="submit" class="btn">Comentar</button>
                 </div>
             </form>
@@ -99,6 +100,7 @@
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             var commentTextarea = document.getElementById('comment');
+            var remetente = document.getElementById('remetente');
             var comment = commentTextarea.value.trim();
             var dados = document.getElementById('dados').value;
 
@@ -109,7 +111,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ comment: comment, dados: dados })
+                    body: JSON.stringify({ comment: comment, dados: dados, remetente: remetente.value })
                     
                 })
                 .then(function(response) {
@@ -118,6 +120,7 @@
                 .then(function(data) {
                     // Limpar o campo de texto do comentário
                     commentTextarea.value = '';
+                    remetente.value = '';
                 })
                 .catch(function(error) {
                     console.error('Erro ao enviar o comentário:', error);
@@ -127,7 +130,7 @@
     });
 
     // Conecte-se ao servidor SocketIO
-    var socket = io.connect('https://registro-suporte-ma.onrender.com/');
+    var socket = io.connect('https://registro-suporte-ma.onrender.com');
     console.log(socket)
     // Evento de conexão
     socket.on('connect', function() {
@@ -147,10 +150,10 @@
     function updateRequests(data) {
         var commentsList = document.getElementById('comments-list');
         var newComment = document.createElement('li');
-        newComment.classList.add("comment")
-        newComment.textContent = data.comment;
+        newComment.classList.add("comment");
+        comentario_formated = `[${data.remetente}]: ${data.comment}`;
+        newComment.textContent = comentario_formated;
         commentsList.appendChild(newComment);
-        commentTextarea.value = '';
     }
     function update_editRequests(data) {
         location.reload()

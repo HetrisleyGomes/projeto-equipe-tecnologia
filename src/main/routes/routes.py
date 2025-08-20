@@ -1,8 +1,9 @@
-from flask import render_template, url_for, request, redirect, Blueprint, jsonify, send_file
+from flask import render_template, url_for, request, redirect, Blueprint, jsonify, send_file, g
 import json
 import csv
 import pandas as pd
 from io import StringIO, BytesIO
+import psycopg2
 
 from src.models.repositories.requisicoes_repository import RequisicoesRepository
 from src.controllers.requisicao_controller import RequisicaoController
@@ -10,6 +11,7 @@ from src.controllers.requisicao_controller import RequisicaoController
 from src.models.settings.db_connection_handler import db_connection_handler
 from src.main.server.server import (
     socketio,
+    app
 )  # Importa socketio do módulo de configuração
 
 main_bp = Blueprint("main_bp", __name__, template_folder="templates")
@@ -18,11 +20,34 @@ inverter_ordem = False
 mostrar_prioridades = True
 mostrar_finalizados = False
 
+# Função para conectar ao banco de dados
+def get_db_connection():
+    if 'db_conn' not in g:
+        try:
+            conn_string = db_connection_handler.get_connection_string()
+            g.db_conn = psycopg2.connect(conn_string)
+            print("Conexão ao banco PostgreSQL estabelecida para a requisição.")
+        except Exception as e:
+            print(f"Erro ao conectar no banco: {e}")
+            g.db_conn = None
+    return g.db_conn
+
+# Função para fechar a conexão no final de cada requisição
+@app.teardown_appcontext
+def close_db_connection(e=None):
+    db_conn = g.pop('db_conn', None)
+    if db_conn is not None:
+        db_conn.close()
+        print("Conexão com o banco fechada.")
 
 @main_bp.route("/")
 @main_bp.route("/index")
 def index():
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
     data = controller.get_all()
     return render_template(
@@ -32,7 +57,6 @@ def index():
         mostrar_prioridades=mostrar_prioridades,
         mostrar_finalizados=mostrar_finalizados,
     )
-
 
 @main_bp.route("/registro")
 def registrar():
@@ -45,7 +69,12 @@ def salvar_registro():
     description = request.form.get("description")
     nome_requisitante = request.form.get("nome_requisitante")
     prioridade = request.form.get("prioridade")
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
     body = {
         "setor": setor,
@@ -60,7 +89,11 @@ def salvar_registro():
 
 @main_bp.route("/ver/<id>")
 def find_registro(id):
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
 
     data = controller.get_one(id)
@@ -80,18 +113,31 @@ def adicionar_comentario():
 
     # Extrai o comentário e dados adicionais
     comment = data.get("comment")
+    remetente = data.get("remetente")
     id = data.get("dados")
 
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    if remetente == '':
+        remetente = 'guess'
+    comentario_formated = f'[{remetente}]: {comment}'
+
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
-    response_data = controller.update_comments(id, comment)
-    socket_data = {"comment": comment}
+    response_data = controller.update_comments(id, comentario_formated)
+    socket_data = {"comment": comment, "remetente": remetente}
     socketio.emit("update", socket_data)
-    return jsonify({"comment": comment})
+    return jsonify({"comment": comment, "remetente": remetente})
 
 @main_bp.route("/relatorio")
 def relatorio():
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
     data = controller.get_all()
     return render_template(
@@ -106,7 +152,11 @@ def download():
     casos_abertos = request.args.get('casos_abertos', 'false') == 'true'
     desse_mes = request.args.get('desse_mes', 'false') == 'true'
 
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
 
     query_args = [0, 0, 0]
@@ -149,7 +199,11 @@ def download():
 
 @main_bp.route("/gerenciar/<id>")
 def edit_registro(id):
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
 
     data = controller.get_one(id)
@@ -164,7 +218,11 @@ def edit_registro(id):
 
 @main_bp.route("/edicao/salvar/<id>", methods=["POST"])
 def edit_salvar_registro(id):
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
 
     description = request.form.get("description")
@@ -187,7 +245,11 @@ def edit_salvar_registro(id):
 
 @main_bp.route("/finalizar/<id>", methods=["GET", "POST"])
 def finalizar_registro(id):
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
 
     data = controller.finalizar(id)
@@ -197,7 +259,11 @@ def finalizar_registro(id):
 
 @main_bp.route("/atualizar_lista", methods=["GET"])
 def atualizar_lista():
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
     data = controller.get_all()
 
@@ -224,7 +290,11 @@ def atualizar_lista():
 @main_bp.route("/delete/<id>", methods=["GET"])
 def delete_registro(id):
     print(f"Tentando deletar ID: {id}")
-    repository = RequisicoesRepository(db_connection_handler.get_connection())
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
     controller.delete_by_id(id)
     socketio.emit("update")

@@ -78,7 +78,7 @@
         });
     });
     // Conecte-se ao servidor SocketIO
-    var socket = io.connect('https://registro-suporte-ma.onrender.com/');
+    var socket = io.connect('https://registro-suporte-ma.onrender.com');
     socket.on('update', function() {
         updateRequests()
     });

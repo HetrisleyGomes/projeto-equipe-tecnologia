@@ -15,17 +15,20 @@ class DbConnectionHandler:
         else:
             print("DATABASE_URL NÃO foi carregado.")
 
-    def connect(self) -> None:
-        try:
-            # Aqui conectamos ao PostgreSQL com psycopg2
-            self.__conn = psycopg2.connect(self.__connection_string)
-            print("Conexão ao banco PostgreSQL estabelecida com sucesso!")
-        except Exception as e:
-            print(f"Erro ao conectar no banco: {e}")
-            self.__conn = None
+    # def connect(self) -> None:
+    #     try:
+    #         # Aqui conectamos ao PostgreSQL com psycopg2
+    #         self.__conn = psycopg2.connect(self.__connection_string)
+    #         print("Conexão ao banco PostgreSQL estabelecida com sucesso!")
+    #     except Exception as e:
+    #         print(f"Erro ao conectar no banco: {e}")
+    #         self.__conn = None
 
-    def get_connection(self) -> Connection:
-        return self.__conn
+    # def get_connection(self) -> Connection:
+    #     return self.__conn
+    
+    def get_connection_string(self) -> str:
+        return self.__connection_string
 
 
 db_connection_handler = DbConnectionHandler()
