@@ -33,11 +33,21 @@
             <textarea name="description" id="description"  class="form-text" cols="30" rows="10" required placeholder="Insira uma breve descrição do que está acontecendo"></textarea>
         </div>
         <div class="container">
-            <span class="bolder-text">Prioridade:</span>
-            <select name="prioridade" id="prioridade" class="form-text lil-form">
-                <option value="0" selected>0</option>
-                <option value="1">1</option>
-            </select>
+            <div class="row">
+                <div class="col">
+                    <span class="bolder-text">Prioridade:</span>
+                    <select name="prioridade" id="prioridade" class="form-text lil-form">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <div class="form-check">
+                        <label for="concluido" class="bolder-text">Marcar como concluído:</label>
+                        <input class="form-check-input checkbox-css" type="checkbox" id="concluido" name="concluido"  value="True">
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-button">
             <button type="submit" class="btn">Enviar</button>

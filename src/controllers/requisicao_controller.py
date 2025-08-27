@@ -11,13 +11,21 @@ class RequisicaoController:
         try:
             id = str(uuid.uuid4())
             data_atual = datetime.today().strftime("%m-%d-%Y")
+            data_end = None
+            status = "A analisar"
+            
+            if body["data_conclusao"]:
+                data_end = data_atual
+                status = "Finalizado"
+
             requisition_infos = {
                 "id": id,
                 "setor": body["setor"],
                 "description": body["description"],
                 "priority": body["prioridade"],
-                "status": "A analisar",
+                "status": status,
                 "data_emissao": data_atual,
+                "data_conclusao": data_end,
                 "nome_requisitante": body["nome_requisitante"],
             }
             self.__repository.registry_requisition(requisition_infos)

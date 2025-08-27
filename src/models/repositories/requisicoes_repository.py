@@ -13,9 +13,9 @@ class RequisicoesRepository:
         cursor.execute(
             """
                 INSERT INTO requisicoes
-                (id, setor, description, priority, status, data_emissao, nome_requisitante)
+                (id, setor, description, priority, status, data_emissao, data_conclusao, nome_requisitante)
                 VALUES
-                (%s,%s,%s,%s,%s,%s,%s)
+                (%s,%s,%s,%s,%s,%s,%s,%s)
             """,
             (
                 requisition_infos["id"],
@@ -24,6 +24,7 @@ class RequisicoesRepository:
                 requisition_infos["priority"],
                 requisition_infos["status"],
                 requisition_infos["data_emissao"],
+                requisition_infos["data_conclusao"],
                 requisition_infos["nome_requisitante"],
             ),
         )

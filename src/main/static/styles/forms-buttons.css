@@ -85,3 +85,13 @@
     };
 }
 /* fim do BUTTONS */
+
+.checkbox-css{
+    border-radius: .25rem;
+    position: static;
+    float: none !important;
+    margin-left: 0 !important;
+    margin-top: -3px !important;
+    width: 1.25rem;
+    height: 1.25rem;
+}

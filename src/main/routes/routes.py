@@ -69,11 +69,16 @@ def salvar_registro():
     description = request.form.get("description")
     nome_requisitante = request.form.get("nome_requisitante")
     prioridade = request.form.get("prioridade")
-    
+    concluido = request.form.get("concluido")
+    if concluido == "True":
+        concluido = True
+    else:
+        concluido = False
+
     connection = get_db_connection()
     if connection is None:
         return "Erro ao conectar ao banco de dados.", 500
-    
+
     repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
     body = {
@@ -81,6 +86,7 @@ def salvar_registro():
         "description": description,
         "nome_requisitante": nome_requisitante,
         "prioridade": prioridade,
+        "data_conclusao": concluido
     }
     data = controller.create(body)
     socketio.emit("update")
