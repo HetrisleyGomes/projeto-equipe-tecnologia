@@ -1,6 +1,5 @@
 from src.main.server.server import app, socketio
 from src.main.routes.routes import main_bp
-from src.models.settings.db_connection_handler import db_connection_handler
 
 
 if __name__ == "__main__":

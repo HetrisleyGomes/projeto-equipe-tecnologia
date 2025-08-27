@@ -28,6 +28,7 @@
                     {% if data['body']['status'] == 'Finalizado' %}
                         <span class="bolder-text">Data conclusão:</span>
                         <span>{{ data['body']['data_conclusao'] }}</span>
+                        <input type="hidden" id="dataConclusaoInput" name="data_conclusao" value="{{ data['body']['data_conclusao'] }}">
                     {% endif %}
                 </div>
             </div>

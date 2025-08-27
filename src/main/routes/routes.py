@@ -62,9 +62,9 @@ def index():
 def registrar():
     return render_template("registrar.html")
 
-
 @main_bp.route("/registro/salvar", methods=["POST"])
 def salvar_registro():
+    # Obtém os dados via POST
     setor = request.form.get("setor")
     description = request.form.get("description")
     nome_requisitante = request.form.get("nome_requisitante")
@@ -116,8 +116,11 @@ def adicionar_comentario():
     remetente = data.get("remetente")
     id = data.get("dados")
 
+    # Se não houver um remetente ele adiciona 'guess'
     if remetente == '':
         remetente = 'guess'
+
+    # Formata a mensagem com o nome do remetente
     comentario_formated = f'[{remetente}]: {comment}'
 
     connection = get_db_connection()
@@ -159,6 +162,7 @@ def download():
     repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
 
+    # Obtém os filtros aplicados
     query_args = [0, 0, 0]
     if casos_encerrados:
         query_args[0] = 1
@@ -228,16 +232,16 @@ def edit_salvar_registro(id):
     description = request.form.get("description")
     priority = request.form.get("priority")
     status = request.form.get("status")
+    data_conclusao = request.form.get('data_conclusao')
 
     if priority == "1":
         if status == "A analisar":
             status = "Vizualizado"
 
-    data = controller.update_infos(id, description, priority, status)
+    data = controller.update_infos(id, description, priority, status, data_conclusao)
 
-
-    if status == "Finalizado":
-        return redirect(url_for("main_bp.finalizar_registro", id=id))
+    #if status == "Finalizado":
+    #    return redirect(url_for("main_bp.finalizar_registro", id=id))
     
     socketio.emit("update")
     return redirect(url_for("main_bp.find_registro", id=id))
