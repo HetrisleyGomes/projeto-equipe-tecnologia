@@ -40,6 +40,10 @@ Clone do repositório:
 git clone https://github.com/HetrisleyGomes/projeto-equipe-tecnologia.git
 ```
 
+Crie um ambiente virtual:
+```bash
+python3 -m venv .venv
+```
 
 Instalando dependências:
 ```bash
@@ -61,6 +65,8 @@ py run.py
 - **Criar requisições**: Permite que qualquer usuáruio na rede crie uma nova requisição.
 - **Atualizar requisições**: Permite que os membros da equipe de tecnologia atualize os dados de uma requisição.
 - **Finalizar requisições**: Oculta requisições concluídas da lista de busca.
+- **Baixar relatório de requisições**: Permite baixar um arquivo excel com as informações de todas as requisições.
+
 
 ## Licença
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.

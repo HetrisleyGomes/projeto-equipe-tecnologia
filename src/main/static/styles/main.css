@@ -46,13 +46,13 @@ header {
     margin-right: auto;
     margin-left: auto;
     padding: 1vh 1vw;
-    max-width: 1300px;
+    max-width: 90vw;
 }
 .row {
     display:flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    align-items: end;
+    align-items: flex-start;
     margin: auto;
 }
 .box {
@@ -76,7 +76,7 @@ header {
     width: 70vw;
 }
 .date-container {
-    height: 10vh;
+    padding: 10px 0 !important;
 }
 .img-tec{
     display: flex;
@@ -90,6 +90,9 @@ header {
 }
 .space {
     margin-bottom: 2vh;
+}
+.item-details {
+    max-width: 84vw !important;
 }
 /* fim das ÁREAS */
 
@@ -178,6 +181,18 @@ h2{
 .setor-req {
     width: 50%;
 }
+
+.ul-servico{
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 6px;
+    margin: 6px 10px;
+    max-width: 30vw;
+}
+.li-servico{
+    list-style: circle;
+    margin: 4px 30px;
+}
 /* ---> fim das LISTAS <--- */
 
 /* ---> UTILS <--- */
@@ -194,6 +209,17 @@ h2{
 }
 hr {
     margin: 4vh 0;
+}
+.vert-line {
+    padding: 0;
+    height: 140px;
+    max-width: 2px;
+    border: #0000004d solid 1px;
+    border-radius: 10px;
+    margin: 0 4vw;
+}
+.only-on-mobile {
+    display: none !important;
 }
 /* fim do UTILS */
 

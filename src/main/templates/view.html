@@ -18,21 +18,40 @@
         <span class="discription">{{ data['body']['description'] }}</span>
     </div>
     <hr>
-    <div class="section container">
+    <div class="section container item-details">
         <div class="row">
             <div class="col">
                 <div class="container date-container">
                     <span class="bolder-text">Data de emissão:</span>
                     <span>{{ data['body']['data_emissao'] }}</span>
+                    {% if data['body']['status'] == 'Finalizado' %}
+                        <div class="container date-container only-on-mobile">
+                            <span class="bolder-text">Data conclusão:</span>
+                            <span id="data_conclusao">{{ data['body']['data_conclusao'] }}</span>
+                        </div>
+                    {% endif %}
                 </div>
-                {% if data['body']['status'] == 'Finalizado' %}
-                <div class="container date-container">
-                    <span class="bolder-text">Data conclusão:</span>
-                    <span id="data_conclusao">{{ data['body']['data_conclusao'] }}</span>
-                </div>
+                
+                {% if data['body']['servicos'] %}
+                    <div class="container date-container">
+                        <span class="bolder-text">Serviços:</span>
+                        <ul class="ul-servico">
+                            {% for servico in data['body']['servicos'].split(',') %}
+                            <li class="li-servico">{{ servico|e }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
+                
             </div>
+            <div class="col vert-line"></div>
             <div class="col">
+                {% if data['body']['status'] == 'Finalizado' %}
+                    <div class="container date-container hide-on-mobile">
+                        <span class="bolder-text">Data conclusão:</span>
+                        <span id="data_conclusao">{{ data['body']['data_conclusao'] }}</span>
+                    </div>
+                {% endif %}
                 <div class="container date-container">
                     <span class="bolder-text">Prioridade:</span>
                     <span id="priority">{{ data['body']['priority'] }}</span>
@@ -58,7 +77,7 @@
             <form class="form" id="comment-form">
                 <textarea name="comment" id="comment" class="form-text" cols="30" rows="3" required placeholder="Digite seu comentário"></textarea>
                 <input type="hidden" id="dados" name="dados" value="{{data['body']['id']}}">
-                <div class="form-button">
+                <div class="form-button button-2">
                     <input type="text" name="remetente" id="remetente" class="form-text" placeholder="Remetente" autocomplete="off">
                     <button type="submit" class="btn">Comentar</button>
                 </div>

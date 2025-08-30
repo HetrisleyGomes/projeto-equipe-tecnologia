@@ -13,9 +13,9 @@ class RequisicoesRepository:
         cursor.execute(
             """
                 INSERT INTO requisicoes
-                (id, setor, description, priority, status, data_emissao, data_conclusao, nome_requisitante)
+                (id, setor, description, priority, status, data_emissao, data_conclusao, nome_requisitante, servicos)
                 VALUES
-                (%s,%s,%s,%s,%s,%s,%s,%s)
+                (%s,%s,%s,%s,%s,%s,%s,%s,%s)
             """,
             (
                 requisition_infos["id"],
@@ -26,6 +26,7 @@ class RequisicoesRepository:
                 requisition_infos["data_emissao"],
                 requisition_infos["data_conclusao"],
                 requisition_infos["nome_requisitante"],
+                requisition_infos["servicos"],
             ),
         )
         self.__conn.commit()
@@ -91,16 +92,17 @@ class RequisicoesRepository:
         cursor.close()
         return comentarios
 
-    def edit_requisition(self, id, description, propriety, status, data_conclusao) -> None:
+    def edit_requisition(self, id, description, propriety, status, data_conclusao, servicos) -> None:
         cursor = self.__conn.cursor()
         
         cursor.execute(
-            "UPDATE requisicoes SET description = %s, priority = %s, status = %s, data_conclusao = %s WHERE id = %s",
+            "UPDATE requisicoes SET description = %s, priority = %s, status = %s, data_conclusao = %s, servicos = %s WHERE id = %s",
             (   
                 description,
                 propriety,
                 status,
                 data_conclusao,
+                servicos,
                 id,
             ),
         )

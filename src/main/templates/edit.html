@@ -24,6 +24,8 @@
                     <span class="bolder-text">Data de emissão:</span>
                     <span>{{ data['body']['data_emissao'] }}</span>
                 </div>
+            </div>
+            <div class="col">
                 <div class="container date-container">
                     {% if data['body']['status'] == 'Finalizado' %}
                         <span class="bolder-text">Data conclusão:</span>
@@ -31,6 +33,43 @@
                         <input type="hidden" id="dataConclusaoInput" name="data_conclusao" value="{{ data['body']['data_conclusao'] }}">
                     {% endif %}
                 </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <span class="bolder-text">Serviços:</span>
+                  <div class="check-area">
+                    <label class="form-check-label">
+                    <input type="checkbox" name="servicos" value="Cabeamento" class="form-check-input check-item" {% if "Cabeamento" in servicos_salvos %}checked{% endif %}>
+                    Cabeamento
+                    </label>
+
+                    <label class="form-check-label">
+                    <input type="checkbox" name="servicos" value="Câmera" class="form-check-input check-item" {% if "Câmera" in servicos_salvos %}checked{% endif %}>
+                    Câmera
+                    </label>
+
+                    <label class="form-check-label">
+                    <input type="checkbox" name="servicos" value="Computador" class="form-check-input check-item" {% if "Computador" in servicos_salvos %}checked{% endif %}>
+                    Computador
+                    </label>
+
+                    <label class="form-check-label">
+                    <input type="checkbox" name="servicos" value="Impressora" class="form-check-input check-item" {% if "Impressora" in servicos_salvos %}checked{% endif %}>
+                    Impressora
+                    </label>
+
+                    <label class="form-check-label">
+                    <input type="checkbox" name="servicos" value="Internet" class="form-check-input check-item" {% if "Internet" in servicos_salvos %}checked{% endif %}>
+                    Internet
+                    </label>
+
+                    <label class="form-check-label">
+                    <input type="checkbox" name="servicos" value="Outro" class="form-check-input check-item" {% if "Outro" in servicos_salvos %}checked{% endif %}>
+                    Outro
+                    </label>
+                  </div>
             </div>
             <div class="col">
                 <div class="container">

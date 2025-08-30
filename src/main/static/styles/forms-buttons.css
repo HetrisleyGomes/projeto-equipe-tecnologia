@@ -38,7 +38,7 @@
 }
 .description-box {
     .form-text{
-        height: 30vh;
+        height: 20vh;
         resize: none;
     }
 }
@@ -86,6 +86,7 @@
 }
 /* fim do BUTTONS */
 
+/* ---> Chackbox <--- */
 .checkbox-css{
     border-radius: .25rem;
     position: static;
@@ -95,3 +96,18 @@
     width: 1.25rem;
     height: 1.25rem;
 }
+.check-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 10px; 
+  max-width: 600px; 
+  margin: 5px 35px
+}
+
+
+.check-item {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 0px;
+}
+
+/* fim do checkbox */

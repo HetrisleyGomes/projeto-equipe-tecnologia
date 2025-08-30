@@ -70,23 +70,30 @@ def salvar_registro():
     nome_requisitante = request.form.get("nome_requisitante")
     prioridade = request.form.get("prioridade")
     concluido = request.form.get("concluido")
+    servicos = request.form.getlist("servicos")
+    print('TESTANDO')
+    print(servicos)
+    
     if concluido == "True":
         concluido = True
     else:
         concluido = False
 
+    servicos_str = ",".join(servicos)
+
     connection = get_db_connection()
     if connection is None:
-        return "Erro ao conectar ao banco de dados.", 500
+       return "Erro ao conectar ao banco de dados.", 500
 
     repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
     body = {
-        "setor": setor,
-        "description": description,
-        "nome_requisitante": nome_requisitante,
-        "prioridade": prioridade,
-        "data_conclusao": concluido
+       "setor": setor,
+       "description": description,
+       "nome_requisitante": nome_requisitante,
+       "prioridade": prioridade,
+       "data_conclusao": concluido,
+       "servicos": servicos_str
     }
     data = controller.create(body)
     socketio.emit("update")
@@ -180,10 +187,10 @@ def download():
     dados = controller.get_by_query(query_args)
 
     # Definir as colunas do relatório
-    colunas = ['Nome', 'Descrição', 'Comentários', 'Prioridade', 'Status', 'Data de Emissão', 'Data de Finalização', 'Requerente']
+    colunas = ['Setor', 'Descrição', 'Comentários', 'Prioridade', 'Status', 'Data de Emissão', 'Data de Finalização', 'Requerente', 'Serviços']
     
     # Extrair apenas os dados relevantes
-    dados_para_df = [row[1:9] for row in dados['body']]
+    dados_para_df = [row[1:10] for row in dados['body']]
 
     # Criar um DataFrame do Pandas
     df = pd.DataFrame(dados_para_df, columns=colunas)
@@ -223,7 +230,9 @@ def edit_registro(id):
     except Exception as e:
         print(e)
 
-    return render_template("edit.html", data=data, comentarios=comentarios)
+    servicos_salvos = data['body']['servicos'].split(",") if data['body']['servicos'] else []
+
+    return render_template("edit.html", data=data, comentarios=comentarios, servicos_salvos=servicos_salvos)
 
 
 @main_bp.route("/edicao/salvar/<id>", methods=["POST"])
@@ -239,15 +248,14 @@ def edit_salvar_registro(id):
     priority = request.form.get("priority")
     status = request.form.get("status")
     data_conclusao = request.form.get('data_conclusao')
+    servicos = request.form.getlist("servicos")
+    servicos_str = ",".join(servicos)
 
     if priority == "1":
         if status == "A analisar":
             status = "Vizualizado"
 
-    data = controller.update_infos(id, description, priority, status, data_conclusao)
-
-    #if status == "Finalizado":
-    #    return redirect(url_for("main_bp.finalizar_registro", id=id))
+    data = controller.update_infos(id, description, priority, status, data_conclusao, servicos_str)
     
     socketio.emit("update")
     return redirect(url_for("main_bp.find_registro", id=id))

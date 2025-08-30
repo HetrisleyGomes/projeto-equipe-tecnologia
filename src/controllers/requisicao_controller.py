@@ -27,6 +27,7 @@ class RequisicaoController:
                 "data_emissao": data_atual,
                 "data_conclusao": data_end,
                 "nome_requisitante": body["nome_requisitante"],
+                "servicos": body["servicos"],
             }
             self.__repository.registry_requisition(requisition_infos)
 
@@ -62,6 +63,7 @@ class RequisicaoController:
                 "data_emissao": data_emissao_formatada,
                 "data_conclusao": data_conclusao_formatada,
                 "nome_requisitante": item[8],
+                "servicos": item[9],
                 }
                 data_formatada.append(content)
             return {"body": data_formatada, "status": 200}
@@ -89,6 +91,7 @@ class RequisicaoController:
                 "data_emissao": data_emissao_formatada,
                 "data_conclusao": data_conclusao_formatada,
                 "nome_requisitante": data[8],
+                "servicos": data[9],
             }
             return {"body": data_formatada, "status": 200}
         except Exception as e:
@@ -101,13 +104,13 @@ class RequisicaoController:
         except Exception as e:
             return {"body": {"error": e}, "status": 400}
 
-    def update_infos(self, id, description, propriety, status, data_conclusao) -> Dict:
+    def update_infos(self, id, description, propriety, status, data_conclusao, servicos) -> Dict:
         try:
             if data_conclusao is not None and status != "Finalizado":
                 data_conclusao = None
             if data_conclusao is None and status == "Finalizado":
                 data_conclusao = datetime.today().strftime("%m-%d-%Y")
-            self.__repository.edit_requisition(id, description, propriety, status, data_conclusao)
+            self.__repository.edit_requisition(id, description, propriety, status, data_conclusao, servicos)
             data = id
             return {"body": data, "status": 200}
         except Exception as e:
