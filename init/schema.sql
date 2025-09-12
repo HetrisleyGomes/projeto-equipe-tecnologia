@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS 'requisicoes' (
+CREATE TABLE IF NOT EXISTS "requisicoes" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "setor" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -9,5 +9,7 @@ CREATE TABLE IF NOT EXISTS 'requisicoes' (
     "data_conclusao" DATE,
     "nome_requisitante" TEXT NOT NULL,
     "servicos" TEXT
-)
+);
+
+CREATE EXTENSION IF NOT EXISTS unaccent;
 

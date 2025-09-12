@@ -96,6 +96,36 @@ class RequisicaoController:
             return {"body": data_formatada, "status": 200}
         except Exception as e:
             return {"body": {"error": e}, "status": 400}
+        
+    def search(self, term):
+        try:
+            data = self.__repository.search(term)
+            data_formatada = []
+            for item in data:
+                # Formatar data_emissao (assumindo que sempre existe e é date)
+                data_emissao_formatada = datetime.strptime(str(item[6]), "%Y-%m-%d").strftime("%d-%m-%Y")
+
+                # Formatar data_conclusao só se não for None
+                if item[7] is not None:
+                    data_conclusao_formatada = datetime.strptime(str(item[7]), "%Y-%m-%d").strftime("%d-%m-%Y")
+                else:
+                    data_conclusao_formatada = None
+                content = {
+                "id": item[0],
+                "setor": item[1],
+                "description": item[2],
+                "comments": item[3],
+                "priority": item[4],
+                "status": item[5],
+                "data_emissao": data_emissao_formatada,
+                "data_conclusao": data_conclusao_formatada,
+                "nome_requisitante": item[8],
+                "servicos": item[9],
+                }
+                data_formatada.append(content)
+            return {"body": data_formatada, "status": 200}
+        except Exception as e:
+            return {"body": {"error": e}, "status": 400}
 
     def update_comments(self, id, comment) -> Dict:
         try:

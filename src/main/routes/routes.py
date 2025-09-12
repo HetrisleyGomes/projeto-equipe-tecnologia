@@ -49,7 +49,14 @@ def index():
     
     repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
-    data = controller.get_all()
+    search_query = request.args.get("q", "").strip()
+
+    if search_query:
+        # Idealmente, você cria um método específico no controller para busca
+        data = controller.search(search_query)
+    else:
+        data = controller.get_all()
+        
     return render_template(
         "index.html",
         data=data,
@@ -277,33 +284,42 @@ def finalizar_registro(id):
 
 @main_bp.route("/atualizar_lista", methods=["GET"])
 def atualizar_lista():
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     connection = get_db_connection()
     if connection is None:
         return "Erro ao conectar ao banco de dados.", 500
     
     repository = RequisicoesRepository(connection)
     controller = RequisicaoController(repository)
-    data = controller.get_all()
 
+    # Parametros de busca
     inverter_ordem = request.args.get("inverter_ordem", "false") == "true"
     mostrar_prioridades = request.args.get("mostrar_prioridades", "false") == "true"
     mostrar_finalizados = request.args.get("mostrar_finalizados", "false") == "true"
+    termo_busca = request.args.get("q", "").strip()
 
-    # Filtrar dados com base no status
-    filtered_data = [
-        item for item in data["body"] if mostrar_finalizados or item['status'] != "Finalizado"
-    ]
+    # Obter dados do banco, com ou sem busca
+    if termo_busca:
+        data = controller.search(termo_busca)
+    else:
+        data = controller.get_all()
 
-    # Filtrar dados com base na prioridade, ordena com prioridade 1 primeiro
-    if mostrar_prioridades:
-        filtered_data.sort(key=lambda x: 0 if x['priority'] == 1 else 1)
+    if len(data["body"]) > 1:
+        # Filtrar dados com base no status
+        filtered_data = [
+            item for item in data["body"] if mostrar_finalizados or item['status'] != "Finalizado"
+        ]
 
-    # Ordenar os dados filtrados
-    sorted_data = filtered_data
-    if inverter_ordem:
-        sorted_data.reverse()
+        # Filtrar dados com base na prioridade, ordena com prioridade 1 primeiro
+        if mostrar_prioridades:
+            filtered_data.sort(key=lambda x: 0 if x['priority'] == 1 else 1)
 
-    return jsonify({"body": sorted_data})
+        # Ordenar os dados filtrados
+        sorted_data = filtered_data
+        if inverter_ordem:
+            sorted_data.reverse()
+        return jsonify({"body": sorted_data})
+    return jsonify({"body": data["body"]})
 
 @main_bp.route("/delete/<id>", methods=["GET"])
 def delete_registro(id):

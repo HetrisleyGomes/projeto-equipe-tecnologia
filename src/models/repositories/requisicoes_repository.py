@@ -54,6 +54,20 @@ class RequisicoesRepository:
         data = cursor.fetchone()
         cursor.close()
         return data
+    
+    def search(self, term):
+        cursor = self.__conn.cursor()
+        query = """
+        SELECT * FROM requisicoes 
+        WHERE unaccent(LOWER(nome_requisitante)) LIKE unaccent(LOWER(%s))
+            OR unaccent(LOWER(setor)) LIKE unaccent(LOWER(%s))
+            OR unaccent(LOWER(description)) LIKE unaccent(LOWER(%s))
+        ORDER BY data_emissao DESC
+        """
+        like_term = f"%{term}%"
+        cursor.execute(query, (like_term, like_term, like_term))
+        results = cursor.fetchall()
+        return results
 
     def set_comments_requisition(self, id, comment) -> List:
         cursor = self.__conn.cursor()
