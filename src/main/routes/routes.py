@@ -252,6 +252,7 @@ def edit_salvar_registro(id):
     controller = RequisicaoController(repository)
 
     description = request.form.get("description")
+    nome_requisitante = request.form.get("nome_requisitante")
     priority = request.form.get("priority")
     status = request.form.get("status")
     data_conclusao = request.form.get('data_conclusao')
@@ -261,8 +262,8 @@ def edit_salvar_registro(id):
     if priority == "1":
         if status == "A analisar":
             status = "Vizualizado"
-
-    data = controller.update_infos(id, description, priority, status, data_conclusao, servicos_str)
+    
+    data = controller.update_infos(id, description, priority, status, data_conclusao, servicos_str, nome_requisitante)
     
     socketio.emit("update")
     return redirect(url_for("main_bp.find_registro", id=id))
@@ -284,7 +285,6 @@ def finalizar_registro(id):
 
 @main_bp.route("/atualizar_lista", methods=["GET"])
 def atualizar_lista():
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     connection = get_db_connection()
     if connection is None:
         return "Erro ao conectar ao banco de dados.", 500

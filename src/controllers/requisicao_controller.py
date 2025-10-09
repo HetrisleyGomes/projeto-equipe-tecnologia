@@ -134,13 +134,13 @@ class RequisicaoController:
         except Exception as e:
             return {"body": {"error": e}, "status": 400}
 
-    def update_infos(self, id, description, propriety, status, data_conclusao, servicos) -> Dict:
+    def update_infos(self, id, description, propriety, status, data_conclusao, servicos, nome_requisitante) -> Dict:
         try:
             if data_conclusao is not None and status != "Finalizado":
                 data_conclusao = None
             if data_conclusao is None and status == "Finalizado":
                 data_conclusao = datetime.today().strftime("%m-%d-%Y")
-            self.__repository.edit_requisition(id, description, propriety, status, data_conclusao, servicos)
+            self.__repository.edit_requisition(id, description, propriety, status, data_conclusao, servicos, nome_requisitante)
             data = id
             return {"body": data, "status": 200}
         except Exception as e:

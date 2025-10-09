@@ -106,17 +106,18 @@ class RequisicoesRepository:
         cursor.close()
         return comentarios
 
-    def edit_requisition(self, id, description, propriety, status, data_conclusao, servicos) -> None:
+    def edit_requisition(self, id, description, propriety, status, data_conclusao, servicos, nome_requisitante) -> None:
         cursor = self.__conn.cursor()
-        
+
         cursor.execute(
-            "UPDATE requisicoes SET description = %s, priority = %s, status = %s, data_conclusao = %s, servicos = %s WHERE id = %s",
+            "UPDATE requisicoes SET description = %s, priority = %s, status = %s, data_conclusao = %s, servicos = %s, nome_requisitante = %s WHERE id = %s",
             (   
                 description,
                 propriety,
                 status,
                 data_conclusao,
                 servicos,
+                nome_requisitante,
                 id,
             ),
         )
