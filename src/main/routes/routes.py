@@ -321,7 +321,7 @@ def atualizar_lista():
         return jsonify({"body": sorted_data})
     return jsonify({"body": data["body"]})
 
-@main_bp.route("/delete/<id>", methods=["GET"])
+@main_bp.route("/delete/<id>", methods=["GET", "DELETE"])
 def delete_registro(id):
     print(f"Tentando deletar ID: {id}")
     connection = get_db_connection()
@@ -334,7 +334,7 @@ def delete_registro(id):
     socketio.emit("update")
     return redirect(url_for("main_bp.index"))
 
-@main_bp.route("/update_request/<int:request_id>", methods=["POST"])
+@main_bp.route("/update_request/<int:request_id>", methods=["POST", "PUT"])
 def update_request(request_id):
     # Código para atualizar a requisição no banco de dados
     data = {"request_id": request_id, "new_data": "updated"}
