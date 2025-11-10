@@ -1,9 +1,9 @@
 from flask import render_template, url_for, request, redirect, Blueprint, jsonify, send_file, g
 import json
-import csv
 import pandas as pd
 from io import StringIO, BytesIO
 import psycopg2
+from pathlib import Path
 
 from src.models.repositories.requisicoes_repository import RequisicoesRepository
 from src.controllers.requisicao_controller import RequisicaoController
@@ -14,7 +14,8 @@ from src.main.server.server import (
     app
 )  # Importa socketio do módulo de configuração
 
-main_bp = Blueprint("main_bp", __name__, template_folder="templates")
+base_dir = Path(__file__).resolve().parent
+main_bp = Blueprint("main_bp", __name__, template_folder=str(base_dir / "templates"))
 
 inverter_ordem = False
 mostrar_prioridades = True
@@ -78,8 +79,6 @@ def salvar_registro():
     prioridade = request.form.get("prioridade")
     concluido = request.form.get("concluido")
     servicos = request.form.getlist("servicos")
-    print('TESTANDO')
-    print(servicos)
     
     if concluido == "True":
         concluido = True

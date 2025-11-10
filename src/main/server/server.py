@@ -1,8 +1,14 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+from pathlib import Path
 
-app = Flask(__name__, template_folder="../templates", static_folder="../static")
+base_dir = Path(__file__).resolve().parent
+app = Flask(
+    __name__,
+    template_folder=str(base_dir / "../templates"),
+    static_folder=str(base_dir / "../static")
+)
 CORS(app, origins=["*"])
 socketio = SocketIO(app, cors_allowed_origins=["https://registro-suporte-ma.onrender.com", "http://172.20.9.251:5000"])
 
