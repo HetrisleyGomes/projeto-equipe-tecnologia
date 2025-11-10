@@ -173,6 +173,7 @@ def download():
     casos_encerrados = request.args.get('casos_encerrados', 'false') == 'true'
     casos_abertos = request.args.get('casos_abertos', 'false') == 'true'
     desse_mes = request.args.get('desse_mes', 'false') == 'true'
+    tres_meses = request.args.get('tres_meses', 'false') == 'true'
 
     connection = get_db_connection()
     if connection is None:
@@ -182,14 +183,18 @@ def download():
     controller = RequisicaoController(repository)
 
     # Obtém os filtros aplicados
-    query_args = [0, 0, 0]
+    query_args = [0, 0, 0, 0]
     if casos_encerrados:
         query_args[0] = 1
-    if casos_abertos:
+    elif casos_abertos:
         query_args[1] = 1
     if desse_mes:
         query_args[2] = 1
-
+    elif tres_meses:
+        query_args[3] = 1
+    
+    print("Query args:")
+    print(query_args)
     dados = controller.get_by_query(query_args)
 
     # Definir as colunas do relatório

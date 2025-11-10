@@ -161,14 +161,19 @@ class RequisicaoController:
             query = "SELECT * FROM requisicoes WHERE 1=1"
 
             if query_args[0] == 1:
+                # Requisições finalizadas
                 query += " AND status = 'Finalizado'"
-            if query_args[1] == 1:
+            elif query_args[1] == 1:
+                # Requisições abertas
                 query += " AND status != 'Finalizado'"
             if query_args[2] == 1:
-                mes_atual = datetime.now().month
-                ano_atual = datetime.now().year
-                query += f" AND EXTRACT(MONTH FROM data_emissao) = {mes_atual} AND EXTRACT(YEAR FROM data_emissao) = {ano_atual}"
+                # Deste mês
+                query += " AND data_emissao >= DATE_TRUNC('month', NOW())"
+            elif query_args[3] == 1:
+                # Dos últimos três meses
+                query += " AND data_emissao >= NOW() - INTERVAL '3 months'"
 
+            print(query)
             data = self.__repository.get_custom_query(query)
 
             return {"body": data, "status": 200}

@@ -6,30 +6,46 @@
         <a href="/" class="btn">Voltar</a>
     </div>
     <form id="filtro-form">
-        <div class="effects-area">
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="radio" name="radio-casos" id="casos_encerrados">
-                <label class="label-switch" for="casos_encerrados">
-                    Visualizar apenas casos encerrados
+        <div class="form-divs">
+            <div class="form-check d-flex">
+                <div class="form-switch">
+                    <input class="form-check-input" type="radio" name="radio-casos" id="casos_encerrados">
+                    <label class="label-switch" for="casos_encerrados">
+                        Visualizar apenas casos encerrados
+                    </label>
+                </div>
+                <div class="form-switch">
+                    <input class="form-check-input" type="radio" name="radio-casos" id="casos_abertos">
+                    <label class="label-switch" for="casos_abertos">
+                    Visualizar apenas casos abertos
                 </label>
+                </div>
+                <div class="form-switch">
+                    <input class="form-check-input" type="radio" name="radio-casos" id="casos_todos" checked>
+                    <label class="label-switch" for="casos_todos">
+                        Visualizar todos
+                    </label>
+                </div>
             </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="radio" name="radio-casos" id="casos_abertos">
-                <label class="label-switch" for="casos_abertos">
-                Visualizar apenas casos abertos
-            </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="radio" name="radio-casos" id="casos_todos" checked>
-                <label class="label-switch" for="casos_todos">
-                    Visualizar todos os casos
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="desse_mes">
-                <label class="label-switch" for="desse_mes">
-                    Visualizar apenas desse mês
-                </label>
+            <div class="form-check  d-flex">
+                <div class="form-switch">
+                    <input class="form-check-input" type="radio" name="radio-time" id="desse_mes">
+                    <label class="label-switch" for="desse_mes">
+                        Visualizar apenas desse mês
+                    </label>
+                </div>
+                <div class="form-switch">
+                    <input class="form-check-input" type="radio" name="radio-time" id="tres_meses" checked>
+                    <label class="label-switch" for="tres_meses">
+                        Visualizar dos últimos três meses
+                    </label>
+                </div>
+                <div class="form-switch">
+                    <input class="form-check-input" type="radio" name="radio-time" id="todos">
+                    <label class="label-switch" for="todos">
+                        Visualizar todos
+                    </label>
+                </div>
             </div>
         </div>
     </form>
@@ -118,6 +134,7 @@
         let casosEncerrados = document.getElementById("casos_encerrados").checked;
         let casosAbertos = document.getElementById("casos_abertos").checked;
         let desseMes = document.getElementById("desse_mes").checked;
+        let tresMeses = document.getElementById("tres_meses").checked;
 
         // Cria a URL com os filtros aplicados
         let url = '/download?';
@@ -129,6 +146,9 @@
         }
         if (desseMes) {
             url += 'desse_mes=true&';
+        }
+        if (tresMeses){
+            url += 'tres_meses=true';
         }
         
         // Remove o último "&" caso exista

@@ -103,11 +103,18 @@
   max-width: 600px; 
   margin: 5px 35px
 }
-
-
 .check-item {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-top: 0px;
 }
-
+.form-divs {
+    display: flex;
+    gap: 1vh;
+    flex-direction: column; 
+}
+.form-check {
+    display: flex !important;
+    justify-content: space-between;
+    max-width: 70%;
+}
 /* fim do checkbox */
