@@ -1,9 +1,10 @@
 from flask import render_template, url_for, request, redirect, Blueprint, jsonify, send_file, g
-import json
-import pandas as pd
+from datetime import date
 from io import StringIO, BytesIO
-import psycopg2
 from pathlib import Path
+import pandas as pd
+import json
+import psycopg2
 
 from src.models.repositories.requisicoes_repository import RequisicoesRepository
 from src.controllers.requisicao_controller import RequisicaoController
@@ -53,17 +54,31 @@ def index():
     search_query = request.args.get("q", "").strip()
 
     if search_query:
-        # Idealmente, você cria um método específico no controller para busca
         data = controller.search(search_query)
     else:
         data = controller.get_all()
-        
+
+    # Especial de aniversários
+    themes = [
+        (27, 1),
+        (17, 3),
+        (16, 4),
+        (26, 5),
+        (18, 7),
+        (20, 9),
+        (14, 11)
+    ]
+
+    today = (date.today().day, date.today().month)
+    is_special_date = today in themes
+            
     return render_template(
         "index.html",
         data=data,
         inverter_ordem=inverter_ordem,
         mostrar_prioridades=mostrar_prioridades,
         mostrar_finalizados=mostrar_finalizados,
+        is_special_date=is_special_date
     )
 
 @main_bp.route("/registro")

@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header class="{% if is_special_date %}happy{% endif %}">
         <div class="container">
             <div class="row">
                 <div class="col-8">
@@ -32,7 +32,11 @@
                     <div class="img-tec">
                         <img src="../static/images/Tecnologia.svg" alt="Logo" class="image-logo tec-imagem">
                         <span class="enfase-tec">
-                            Setor de Tecnologia da cidade de Monte Alegre.
+                            {% if is_special_date %}
+                                Feliz aniversário!
+                            {% else %}
+                                Setor de Tecnologia da cidade de Monte Alegre.
+                            {% endif %}
                         </span>
                     </div>
                 </div>
